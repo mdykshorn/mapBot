@@ -98,7 +98,7 @@ class laserScan(object):
 				for pin_index in range(len(self.pins)):
 					self.drivemode(self.pins, pin_index)
 					#waits for .0025 seconds keeping the sensor reading at 100hz
-					time.sleep(.0025)
+					time.sleep(.05)
 					step += 1
 					#checks for when the sensor triggers 0 angle calibration
 					#reads value from sensor
