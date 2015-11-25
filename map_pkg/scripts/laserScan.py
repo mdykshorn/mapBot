@@ -69,7 +69,8 @@ if __name__ == '__main__':
 	lScan = laserScan()
 
 	lScan.calibrate()
-
+	#sets the length of scan
+	scantime = input('how many datapoints')
 	count = 0
 
 	#runs while count is less than the number of datapoints
