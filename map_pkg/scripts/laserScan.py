@@ -60,7 +60,7 @@ class laserScan:
 
 if __name__ == '__main__':
 
-	creates an instance of the class
+	#creates an instance of the class
 	lScan = laserscan()
 
 	lScan.calibrate()
