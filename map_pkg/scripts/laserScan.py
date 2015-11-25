@@ -20,14 +20,18 @@ class laserScan:
 
 	def calibrate(self):
 
-		#reads value from sensor
-		rotateVal = ADC.read("P9_39")
-		#checks if value is below the threshold
-		if rotateVal < self.threshold:
-			mystepper.zero_angle()
+		while mystepper.angle~=0:
 
-		#rotates the steper 3.6 degrees or 4 steps(after gearing)
-		mystepper.rotate(3.6, 150)
+			#rotates the steper 3.6 degrees or 4 steps(after gearing)
+			mystepper.rotate(3.6, 150)
+			#reads value from sensor
+			rotateVal = ADC.read("P9_39")
+			#checks if value is below the threshold
+			if rotateVal < self.threshold:
+				mystepper.zero_angle()
+			#sleeps for .01 seconds to not overload motor
+			time.sleep(.01)
+
 
 	#function that scans with inputs of speed(in rpm)
 	def scan(self, speed):
