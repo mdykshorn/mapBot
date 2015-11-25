@@ -20,6 +20,9 @@ class laserScan:
 
 	def calibrate(self):
 
+		#rotate once to change angle from 0
+		self.mystepper.rotate(3.6, 150)
+
 		while self.mystepper.angle!=0:
 
 			#rotates the steper 3.6 degrees or 4 steps(after gearing)
