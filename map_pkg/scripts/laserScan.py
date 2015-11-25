@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
 	#runs while count is less than the number of datapoints
 	while count<scantime:
-		lScan.scan(150)
+		lScan.scan(75)
 		Distance = lScan.distance()
 		Degree = lScan.degree()
 
