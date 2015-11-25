@@ -10,7 +10,7 @@ class laserScan:
 		#sets up ADC
 		ADC.setup()
 		#creates an instance of the stepper class
-		mystepper = Stepper()
+		self.mystepper = Stepper()
 		#cretes a value for the threshold
 		self.threshold = .7
 		#creates a variable for the current degree measurement
@@ -20,15 +20,15 @@ class laserScan:
 
 	def calibrate(self):
 
-		while mystepper.angle!=0:
+		while self.mystepper.angle!=0:
 
 			#rotates the steper 3.6 degrees or 4 steps(after gearing)
-			mystepper.rotate(3.6, 150)
+			self.mystepper.rotate(3.6, 150)
 			#reads value from sensor
 			rotateVal = ADC.read("P9_39")
 			#checks if value is below the threshold
 			if rotateVal < self.threshold:
-				mystepper.zero_angle()
+				self.mystepper.zero_angle()
 			#sleeps for .01 seconds to not overload motor
 			time.sleep(.01)
 
@@ -39,7 +39,7 @@ class laserScan:
 		rotateVal = ADC.read("P9_39")
 		#reads value from sensor
 		if rotateVal < self.threshold:
-			mystepper.zero_angle()
+			self.mystepper.zero_angle()
 
 		#read data from LIDAR (need to figure out how)
 
@@ -48,7 +48,7 @@ class laserScan:
 		self._distance = 2 #temporarily assigns distance to 2m
 
 		#rotates the steper 3.6 degrees or 4 steps(after gearing)
-		mystepper.rotate(3.6, speed)
+		self.mystepper.rotate(3.6, speed)
 
 	@property
 	def degree(self):
