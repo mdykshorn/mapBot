@@ -14,8 +14,8 @@ class laserScan:
 		#cretes a value for the threshold
 		self.threshold = .7
 		#creates a variable for the current degree measurement
-		self._degree = none
-		self._distance = none
+		self._degree = 0
+		self._distance = 0
 
 
 	def calibrate(self):
@@ -78,6 +78,3 @@ if __name__ == '__main__':
 
 		#sleeps for .01 seconds, keeping the rate of scanning 100hz
 		time.sleep(.5)
-
-
-
