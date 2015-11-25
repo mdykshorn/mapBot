@@ -48,7 +48,7 @@ class laserScan(object):
 		#sets up ADC
 		ADC.setup()
 		#cretes a value for the threshold
-		self.threshold = .7
+		self.threshold = .2
 		#creates a variable for the distance measurment
 		self.distance = 0
 
@@ -61,7 +61,7 @@ class laserScan(object):
 			for pin_index in range(len(self.pins)):
 				self.drivemode(self.pins, pin_index)
 				#waits for .0025 seconds keeping the sensor reading at 100hz
-				time.sleep(.0025)
+				time.sleep(.01)
 				#checks for when the sensor triggers 0 angle calibration
 				#reads value from sensor
 				rotateVal = ADC.read("P9_39")
