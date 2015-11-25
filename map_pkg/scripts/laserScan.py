@@ -91,6 +91,7 @@ class laserScan(object):
 					rotateVal = ADC.read("P9_39")
 					if rotateVal < self.threshold:
 						self.angle = 0
+						step = 0
 					else:
 						self.angle = self.angle + .9
 
