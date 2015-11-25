@@ -44,7 +44,7 @@ class laserScan:
 		#read data from LIDAR (need to figure out how)
 
 		#set the degree measurment to the current calculated angle
-		self._degree = mystepper.angle
+		self._degree = self.mystepper.angle
 		self._distance = 2 #temporarily assigns distance to 2m
 
 		#rotates the steper 3.6 degrees or 4 steps(after gearing)
@@ -65,7 +65,6 @@ if __name__ == '__main__':
 
 	lScan.calibrate()
 
-	scantime = input('how many data points')
 	count = 0
 
 	#runs while count is less than the number of datapoints
