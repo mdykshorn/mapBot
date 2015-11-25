@@ -4,7 +4,6 @@
 #imports necessary libraries
 import time
 import math
-from __future__ import division
 import Adafruit_BBIO.ADC as ADC
 import Adafruit_BBIO.GPIO as GPIO
 
