@@ -32,7 +32,7 @@ def fullstep(pins, pin_index):
 
 class laserScan(object):
 	def __init__(self, steps_per_rev=2048.0,
-				 pins=["P8_13", "P8_14", "P8_15", "P8_16"]):
+				 pins=["P9_27", "P8_15", "P8_11", "P8_12"]):
 
 		self.pins = pins
 		
@@ -62,7 +62,6 @@ class laserScan(object):
 				self.drivemode(self.pins, pin_index)
 				#waits for .0025 seconds keeping the sensor reading at 100hz
 				time.sleep(.0025)
-				step += 1
 				#checks for when the sensor triggers 0 angle calibration
 				#reads value from sensor
 				rotateVal = ADC.read("P9_39")
