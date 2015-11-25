@@ -33,7 +33,7 @@ class laserScan:
 			if rotateVal < self.threshold:
 				self.mystepper.zero_angle()
 			#sleeps for .01 seconds to not overload motor
-			time.sleep(.01)
+			time.sleep(.1)
 
 
 	#function that scans with inputs of speed(in rpm)
