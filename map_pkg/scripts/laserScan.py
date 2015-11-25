@@ -6,6 +6,7 @@ import time
 import math
 import Adafruit_BBIO.ADC as ADC
 import Adafruit_BBIO.GPIO as GPIO
+from Adafruit_I2C import Adafruit_I2C
 
 def initialize_pins(pins):
 	for pin in pins:
@@ -34,13 +35,26 @@ class laserScan(object):
 	def __init__(self, steps_per_rev=2048.0,
 				 pins=["P9_27", "P8_15", "P8_11", "P8_12"]):
 
+		#sets lidar lite addresses
+		self.address = 0x62
+		self.distWriteReg = 0x00
+		self.distWriteVal = 0x04
+		self.distReadReg1 = 0x8f
+		self.distReadReg2 = 0x10
+
+		#initilizes the i2c bus on address lidar lite address
+		self.i2c = Adafruit_I2C(self.address)
+		
+
+		#creates pins for the stepper motors
 		self.pins = pins
 		
+		#initlizes the pins for stepper
 		initialize_pins(self.pins)
 		set_all_pins_low(self.pins)
 		
+		#sets angle to 0
 		self.angle = 0
-		self.steps_per_rev = steps_per_rev
 		
 		# Initialize stepping mode
 		self.drivemode = fullstep
@@ -91,15 +105,20 @@ class laserScan(object):
 					rotateVal = ADC.read("P9_39")
 					if rotateVal < self.threshold:
 						self.angle = 0
-						step = 0
 					else:
 						self.angle = self.angle + .9
 
 
-			#read data from LIDAR (need to figure out how)
-				
-			#set the read distance to the distance variable
-			self.distance = 2.0
+			#read data from LIDAR
+			#writes to the register that takes measurment
+			self.i2c.write8(self.distWriteReg, self.distWriteVal)
+			#waits 1ms to prevent overpolling
+			time.sleep(.001)
+			#reads distance from Lidar
+			dist1 = self.i2c.readU8(self.distReadReg1)
+			dist2 = self.i2c.readU8(self.distReadReg2)
+			#shifts bits to get correct distance
+			self.distance = (dist1<<8) + dist2
 
 			print self.angle, self.distance
 	
