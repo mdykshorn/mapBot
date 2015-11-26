@@ -4,7 +4,7 @@
 #imports necessary libraries
 import time
 import math
-import rospy
+#import rospy
 import Adafruit_BBIO.ADC as ADC
 import Adafruit_BBIO.GPIO as GPIO
 from Adafruit_I2C import Adafruit_I2C
