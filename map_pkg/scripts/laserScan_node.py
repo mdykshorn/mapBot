@@ -93,7 +93,7 @@ class laserScan(object):
 		self.msg.scan_time = 0 			#can delte later
 		self.msg.range_min = 0
 		self.msg.range_max = 40
-		self.msg.ranges[] = None		#can delete later
+		self.msg.ranges = None		#can delete later
 
 	def calibrate(self):
 		#sets angle to 1 so loop will run
