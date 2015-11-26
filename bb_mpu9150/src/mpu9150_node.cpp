@@ -203,55 +203,55 @@ int main(int argc, char **argv)
   	//IMU Message
     sensor_msgs::IMU msgIMU;
     std_msgs::String header;
-    geometry_msgs::Quaternion orientation
-    geometry_msgs::Vector3 angular_velocity
-    geometry_msgs::Vector3 linear_acceleration
+    geometry_msgs::Quaternion orientation;
+    geometry_msgs::Vector3 angular_velocity;
+    geometry_msgs::Vector3 linear_acceleration;
     //magnetometer message
-    sensor_msgs::MagneticField msgMAG
-    geometry_msgs::Vector3 magnetic_field
+    sensor_msgs::MagneticField msgMAG;
+    geometry_msgs::Vector3 magnetic_field;
 
 //modified to output in the format of IMU message
 	if (mpu9150_read(&mpu) == 0) {
 		//IMU Message
 		//sets up header for IMU message
-		msgIMU.header.seq = count
+		msgIMU.header.seq = count;
 		msgIMU.header.stamp.sec = ros::Time::now();
-		msgIMU.header.frame_id = "/base_link"
+		msgIMU.header.frame_id = "/base_link";
 		//adds data to the sensor message
 		//orientation
-		msgIMU.orientation.x = mpu.fusedQuat[QUAT_X]
-		msgIMU.orientation.y = mpu.fusedQuat[QUAT_Y]
-		msgIMU.orientation.z = mpu.fusedQuat[QUAT_Z]
-		msgIMU.orientation.w = mpu.fusedQuat[QUAT_W]
+		msgIMU.orientation.x = mpu.fusedQuat[QUAT_X];
+		msgIMU.orientation.y = mpu.fusedQuat[QUAT_Y];
+		msgIMU.orientation.z = mpu.fusedQuat[QUAT_Z];
+		msgIMU.orientation.w = mpu.fusedQuat[QUAT_W];
 		//msgIMU.orientation_covariance[0] = 
 		//angular velocity
-		msgIMU.angular_velocity.x = mpu.fusedEuler[VEC3_X] * RAD_TO_DEGREE
-		msgIMU.angular_velocity.y = mpu.fusedEuler[VEC3_Y] * RAD_TO_DEGREE
-		msgIMU.angular_velocity.z = mpu.fusedEuler[VEC3_Z] * RAD_TO_DEGREE
+		msgIMU.angular_velocity.x = mpu.fusedEuler[VEC3_X] * RAD_TO_DEGREE;
+		msgIMU.angular_velocity.y = mpu.fusedEuler[VEC3_Y] * RAD_TO_DEGREE;
+		msgIMU.angular_velocity.z = mpu.fusedEuler[VEC3_Z] * RAD_TO_DEGREE;
 		//msgIMU.angular_velocity_covariance[] = 
 		//linear acceleration
-		msgIMU.linear_acceleration.x = mpu.calibratedAccel[VEC3_X]
-		msgIMU.linear_acceleration.y = mpu.calibratedAccel[VEC3_Y]
-		msgIMU.linear_acceleration.z = mpu.calibratedAccel[VEC3_Z]
+		msgIMU.linear_acceleration.x = mpu.calibratedAccel[VEC3_X];
+		msgIMU.linear_acceleration.y = mpu.calibratedAccel[VEC3_Y];
+		msgIMU.linear_acceleration.z = mpu.calibratedAccel[VEC3_Z];
 		//msgIMU.linear_acceleration_covariance[] = 
 
 		//Magnetometer Message
 		//sets up header
-		msgMAG.header.seq = count
-		msgMAG.header.stamp.sec = ros::Time::now()
-		msgMAG.header.fram_id = "base_link"
+		msgMAG.header.seq = count;
+		msgMAG.header.stamp.sec = ros::Time::now();
+		msgMAG.header.fram_id = "base_link";
 		//adds data to magnetic field message
-		msgMAG.magnetic_field.x = mpu.calibratedMag[VEC3_X]
-		msgMAG.magnetic_field.y = mpu.calibratedMag[VEC3_Y]
-		msgMAG.magnetic_field.z = mpu.calibratedMag[VEC3_Z]
+		msgMAG.magnetic_field.x = mpu.calibratedMag[VEC3_X];
+		msgMAG.magnetic_field.y = mpu.calibratedMag[VEC3_Y];
+		msgMAG.magnetic_field.z = mpu.calibratedMag[VEC3_Z];
 		//fills the list with zeros as per message spec when no covariance is known
-		msgMAG.magnetic_field_covariance[9] = {0}
+		msgMAG.magnetic_field_covariance[9] = {0};
 
 	}
 
 	//publish both messages
     pub.publish(msgIMU);
-    pubM.publish(msgMAG)
+    pubM.publish(msgMAG);
     ros::spinOnce();
     loop_rate.sleep();
     ++count;
