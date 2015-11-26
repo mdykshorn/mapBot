@@ -15,7 +15,11 @@
  */
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-//#include "sensor_msgs/IMU.msg"
+//include IMU message, geometry message quaternion, geometry message vector3, and magnetic field
+#include "sensor_msgs/Imu.h"
+#include "geometry_msgs/Quaternion.h"
+#include "geometry_msgs/Vector3.h"
+#include "sensor_msgs/MagneticField.h"
 #include <sstream>
 
 #include <stdio.h>
@@ -75,7 +79,9 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "mpu9150_node");
   ros::NodeHandle n;
   //creates publisher of IMU message
-  ros::Publisher chatter_pub = n.advertise<std_msgs::String>("imu_euler", 1000);
+  ros::Publisher pub = n.advertise<sensor_msgs::IMU>("imu/data_raw", 1000);
+  //creates publisher of Magnetic FIeld message
+  ros::Publisher pubM = n.advertise<sensor_msgs::MagneticField>("imu/mag", 1000)
   ros::Rate loop_rate(10);
 
   /* Init the sensor the values are hardcoded at the local_defaults.h file */
@@ -193,25 +199,59 @@ int main(int argc, char **argv)
   int count = 0;
   while (ros::ok())
   {
-    std_msgs::String msg;
-    std::stringstream ss;
+  	//creates objects of each message type
+  	//IMU Message
+    sensor_msgs::IMU msgIMU;
+    std_msgs::String header;
+    geometry_msgs::Quaternion orientation
+    geometry_msgs::Vector3 angular_velocity
+    geometry_msgs::Vector3 linear_acceleration
+    //magnetometer message
+    sensor_msgs::MagneticField msgMAG
+    geometry_msgs::Vector3 magnetic_field
 
+//modified to output in the format of IMU message
 	if (mpu9150_read(&mpu) == 0) {
-		//print_fused_euler_angles(&mpu);
-	    //ss << "\rX: %0.0f Y: %0.0f Z: %0.0f        ",
-	    ss << "\rX: " << mpu.fusedEuler[VEC3_X] * RAD_TO_DEGREE <<
-            " Y: " << mpu.fusedEuler[VEC3_Y] * RAD_TO_DEGREE <<
-			" Z: " << mpu.fusedEuler[VEC3_Z] * RAD_TO_DEGREE << count;
+		//IMU Message
+		//sets up header for IMU message
+		msgIMU.header.seq = count
+		msgIMU.header.stamp.sec = ros::Time::now();
+		msgIMU.header.frame_id = "/base_link"
+		//adds data to the sensor message
+		//orientation
+		msgIMU.orientation.x = mpu.fusedQuat[QUAT_X]
+		msgIMU.orientation.y = mpu.fusedQuat[QUAT_Y]
+		msgIMU.orientation.z = mpu.fusedQuat[QUAT_Z]
+		msgIMU.orientation.w = mpu.fusedQuat[QUAT_W]
+		//msgIMU.orientation_covariance[0] = 
+		//angular velocity
+		msgIMU.angular_velocity.x = mpu.fusedEuler[VEC3_X] * RAD_TO_DEGREE
+		msgIMU.angular_velocity.y = mpu.fusedEuler[VEC3_Y] * RAD_TO_DEGREE
+		msgIMU.angular_velocity.z = mpu.fusedEuler[VEC3_Z] * RAD_TO_DEGREE
+		//msgIMU.angular_velocity_covariance[] = 
+		//linear acceleration
+		msgIMU.linear_acceleration.x = mpu.calibratedAccel[VEC3_X]
+		msgIMU.linear_acceleration.y = mpu.calibratedAccel[VEC3_Y]
+		msgIMU.linear_acceleration.z = mpu.calibratedAccel[VEC3_Z]
+		//msgIMU.linear_acceleration_covariance[] = 
 
-		// printf_fused_quaternions(&mpu);
-	    // print_calibrated_accel(&mpu);
-	    // print_calibrated_mag(&mpu);
+		//Magnetometer Message
+		//sets up header
+		msgMAG.header.seq = count
+		msgMAG.header.stamp.sec = ros::Time::now()
+		msgMAG.header.fram_id = "base_link"
+		//adds data to magnetic field message
+		msgMAG.magnetic_field.x = mpu.calibratedMag[VEC3_X]
+		msgMAG.magnetic_field.y = mpu.calibratedMag[VEC3_Y]
+		msgMAG.magnetic_field.z = mpu.calibratedMag[VEC3_Z]
+		//fills the list with zeros as per message spec when no covariance is known
+		msgMAG.magnetic_field_covariance[9] = {0}
 
-       msg.data = ss.str();
-       ROS_INFO("ROS_INFO: %s\n", msg.data.c_str());
 	}
-//	linux_delay_ms(loop_delay);
-    chatter_pub.publish(msg);
+
+	//publish both messages
+    pub.publish(msgIMU);
+    pubM.publish(msgMAG)
     ros::spinOnce();
     loop_rate.sleep();
     ++count;
