@@ -5,9 +5,9 @@
  *
  *    Description: ROS package that launches a node and publishes the Invensense MPU-9150 to a Topic  
  *
- *        Version:  1.0
+ *        Version:  1.1
  *        Created:  27/07/13 15:06:50
- *       Revision:  none
+ *       Revision:  Morgan Dykshorn 11/26/15 mdd27@vt.edu
  *
  *         Author:  Víctor Mayoral Vilches <v.mayoralv@gmail.com>
  *
@@ -15,6 +15,7 @@
  */
 #include "ros/ros.h"
 #include "std_msgs/String.h"
+#include "sensor_msgs/IMU.msg"
 #include <sstream>
 
 #include <stdio.h>
@@ -73,6 +74,7 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "mpu9150_node");
   ros::NodeHandle n;
+  //creates publisher of IMU message
   ros::Publisher chatter_pub = n.advertise<std_msgs::String>("imu_euler", 1000);
   ros::Rate loop_rate(10);
 
