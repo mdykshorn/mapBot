@@ -97,7 +97,7 @@ class laserScan(object):
 			for pin_index in range(len(self.pins)):
 				self.drivemode(self.pins, pin_index)
 				
-				writes to the LIDAR to take a reading
+				#writes to the LIDAR to take a reading
 				#writes to the register that takes measurment
 				self.i2c.write8(self.distWriteReg, self.distWriteVal)
 				#waits for 'x' seconds to control motor speed and prevent sensor overpolling(minimum sleep time is .0025)
@@ -122,7 +122,7 @@ class laserScan(object):
 				print self.angle, self.distance, count
 				
 				count = count+1
-				
+
 		set_all_pins_low(self.pins)	
 
 
