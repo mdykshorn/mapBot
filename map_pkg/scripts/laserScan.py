@@ -93,7 +93,7 @@ class laserScan(object):
 			# sets ammount of steps for each time function is called
 			steps = 4
 			self.direction = 1
-			lastval = none
+			lastval = 1
 		
 			while step < steps:
 				for pin_index in range(len(self.pins)):
@@ -104,6 +104,8 @@ class laserScan(object):
 					#checks for when the sensor triggers 0 angle calibration
 					#reads value from sensor
 					rotateVal = ADC.read("P9_39")
+					#checks if the sensor is over the threshold but the last value is under the threshold
+					#if both are true the sensor has just been passe dan should now reset
 					if rotateVal > self.threshold and lastval<self.threshold:
 						self.angle = 0
 					else:
