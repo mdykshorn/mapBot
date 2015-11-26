@@ -86,6 +86,8 @@ class laserScan(object):
 	
 	def scan(self):
 		
+		lastval = 1
+
 		#runs indefinitely
 		while 1:
 			#set step to 0
@@ -93,7 +95,7 @@ class laserScan(object):
 			# sets ammount of steps for each time function is called
 			steps = 4
 			self.direction = 1
-			lastval = 1
+
 		
 			while step < steps:
 				for pin_index in range(len(self.pins)):
