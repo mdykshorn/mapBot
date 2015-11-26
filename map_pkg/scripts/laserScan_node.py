@@ -80,7 +80,7 @@ class laserScan(object):
 		self.datatime1 = 0.0
 		self.datatime2 = 0.0
 		#creates a list of all angles throughout the scan (saves angle in radians)
-		self.angleR[] = None
+		self.angleR = None
 
 		#creates a variable for the ROS message and initilizes constant parameters
 		#self.msg = LaserScan()
