@@ -91,8 +91,12 @@ class laserScan(object):
 	def scan(self):
 		#initilizes a count for number of datapoints
 		count = 0
+		changes angle temporarily so loop will run
+		self.angle = .01
+		#creates a variable that returns 1 when the scan completes
+		scanComplete = 0
 		#runs indefinitely
-		while 1:
+		while count<400 or self.angle != 0:
 	
 			for pin_index in range(len(self.pins)):
 				self.drivemode(self.pins, pin_index)
@@ -123,7 +127,9 @@ class laserScan(object):
 				
 				count = count+1
 
-		set_all_pins_low(self.pins)	
+		set_all_pins_low(self.pins)
+		scanComplete = 1
+		return scanComplete	
 
 
 if __name__ == '__main__':
@@ -133,4 +139,5 @@ if __name__ == '__main__':
 
 	lScan.calibrate()
 
-	lScan.scan()
+	complete = lScan.scan()
+	print complete
