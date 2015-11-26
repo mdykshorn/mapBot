@@ -223,14 +223,14 @@ if __name__ == '__main__':
 		#self.msg.header.frame_id = "/base_link"
 
 		#pub.publish(self.msg)
-		print self.msg.angle_min
-		print self.msg.angle_max
-		print self.msg.angle_increment
-		print self.msg.time_increment
-		print self.msg.scan_time
-		print self.msg.range_min
-		print self.msg.range_max
-		print self.msg.ranges
+		print lScan.msg.angle_min
+		print lScan.msg.angle_max
+		print lScan.msg.angle_increment
+		print lScan.msg.time_increment
+		print lScan.msg.scan_time
+		print lScan.msg.range_min
+		print lScan.msg.range_max
+		print lScan.msg.ranges
 
 		sequence = sequence+1
 
