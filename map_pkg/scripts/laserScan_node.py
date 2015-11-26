@@ -12,9 +12,6 @@ import Adafruit_BBIO.GPIO as GPIO
 from Adafruit_I2C import Adafruit_I2C
 
 
-# Create variable so we can always see/use it, but set it to a value that indicates it's not yet valid
-pub = None
-
 def initialize_pins(pins):
 	for pin in pins:
 		GPIO.setup(pin, GPIO.OUT)
@@ -180,8 +177,7 @@ if __name__ == '__main__':
 
 	#initializes the node named scanner
 	rospy.init_node('irdistance', anonymous=True)
-	# Declare we are using the pub defined above, not a new local variable
-	global pub
+
 	pub = rospy.Publisher('/scan', LaserScan, queue_size=10)
 
 	#creates an instance of the class
@@ -198,11 +194,11 @@ if __name__ == '__main__':
 	while not rospy.is_shutdown():
 		scanComplete = lScan.scan()
 		#creates message header
-		self.msg.header.seq = sequence
-		self.msg.header.stamp = self.startTime
-		self.msg.header.frame_id = "/base_link"
+		lScan.msg.header.seq = sequence
+		lScan.msg.header.stamp = self.startTime
+		lScan.msg.header.frame_id = "/base_link"
 
-		pub.publish(self.msg)
+		pub.publish(lScan.msg)
 
 
 		sequence = sequence+1
