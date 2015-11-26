@@ -89,7 +89,8 @@ class laserScan(object):
 
 	
 	def scan(self):
-
+		#initilizes a count for number of datapoints
+		count = 0
 		#runs indefinitely
 		while 1:
 	
@@ -118,8 +119,10 @@ class laserScan(object):
 				#shifts bits to get correct distance
 				self.distance = (dist1<<8) + dist2
 
-				print self.angle, self.distance
-	
+				print self.angle, self.distance, count
+				
+				count = count+1
+				
 		set_all_pins_low(self.pins)	
 
 
