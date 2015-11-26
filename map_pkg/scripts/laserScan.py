@@ -65,10 +65,13 @@ class laserScan(object):
 		self.threshold = .2
 		#creates a variable for the distance measurment
 		self.distance = 0
+		#creates a variable for the last ir sensor read
+		self.lastval = 1
 
 	def calibrate(self):
 		#sets angle to 1 so loop will run
 		self.angle = 1.0
+
 
 		while self.angle!=0:
 
@@ -79,14 +82,13 @@ class laserScan(object):
 				#checks for when the sensor triggers 0 angle calibration
 				#reads value from sensor
 				rotateVal = ADC.read("P9_39")
-				if rotateVal < self.threshold:
-					self.angle = 0			
+				if rotateVal > self.threshold and self.lastval<self.threshold:
+					self.angle = 0
+				self.lastval = rotateVal			
 		set_all_pins_low(self.pins)	
 
 	
 	def scan(self):
-		
-		lastval = 1
 
 		#runs indefinitely
 		while 1:
@@ -108,11 +110,11 @@ class laserScan(object):
 					rotateVal = ADC.read("P9_39")
 					#checks if the sensor is over the threshold but the last value is under the threshold
 					#if both are true the sensor has just been passe dan should now reset
-					if rotateVal > self.threshold and lastval<self.threshold:
+					if rotateVal > self.threshold and self.lastval<self.threshold:
 						self.angle = 0
 					else:
 						self.angle = self.angle + .9
-					lastval = rotateVal
+					self.lastval = rotateVal
 
 
 			#read data from LIDAR
