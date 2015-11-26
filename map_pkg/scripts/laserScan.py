@@ -45,7 +45,6 @@ class laserScan(object):
 		#initilizes the i2c bus on address lidar lite address on bus 1
 		self.i2c = Adafruit_I2C(self.address, 1)
 		
-
 		#creates pins for the stepper motors
 		self.pins = pins
 		
