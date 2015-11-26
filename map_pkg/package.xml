@@ -2,7 +2,7 @@
 <package>
   <name>map_pkg</name>
   <version>0.0.1</version>
-  <description>The map+pkg package</description>
+  <description>The map_pkg package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
