@@ -5,9 +5,16 @@
 import time
 import math
 #import rospy
+#from sensor_msgs.msg import LaserScan
+#from std_msgs.msg import Header
 import Adafruit_BBIO.ADC as ADC
 import Adafruit_BBIO.GPIO as GPIO
 from Adafruit_I2C import Adafruit_I2C
+
+#ALL ROS commands are temprorarily commented out for testing purposes
+
+# Create variable so we can always see/use it, but set it to a value that indicates it's not yet valid
+pub = None
 
 def initialize_pins(pins):
 	for pin in pins:
@@ -67,6 +74,25 @@ class laserScan(object):
 		self.distance = 0
 		#creates a variable for the last ir sensor read
 		self.lastval = 1
+		#creates variables for time
+		self.startTime = 0.0
+		self.finishTime = 0.0
+		self.datatime1 = 0.0
+		self.datatime2 = 0.0
+		#creates a list of all angles throughout the scan (saves angle in radians)
+		self.angleR[] = None
+
+		#creates a variable for the ROS message and initilizes constant parameters
+		#self.msg = LaserScan()
+		self.msg = None					#can delete later
+		self.msg.angle_min = 0 			#can delete later
+		self.msg.angle_max = 0 			#can delete later
+		self.msg.angle_increment = 0.015708
+		self.msg.time_increment = 0 	#can delete later
+		self.msg.scan_time = 0 			#can delte later
+		self.msg.range_min = 0
+		self.msg.range_max = 40
+		self.msg.ranges[] = None		#can delete later
 
 	def calibrate(self):
 		#sets angle to 1 so loop will run
@@ -91,14 +117,20 @@ class laserScan(object):
 	def scan(self):
 		#initilizes a count for number of datapoints
 		count = 0
-		changes angle temporarily so loop will run
+		#changes angle temporarily so loop will run
 		self.angle = .01
 		#creates a variable that returns 1 when the scan completes
 		scanComplete = 0
 		#runs indefinitely
+		#records the start time 
+		#self.startTime = rospy.get_time()
+		self.startTime = time.clock()		#can delete later
 		while count<400 or self.angle != 0:
 	
 			for pin_index in range(len(self.pins)):
+				#gets time before first reading
+				#self.datatime1 = rospy.get_time()
+				self.datatime1 = time.clock()		#can delete later
 				self.drivemode(self.pins, pin_index)
 				
 				#writes to the LIDAR to take a reading
@@ -117,27 +149,74 @@ class laserScan(object):
 				else:
 					self.angle = self.angle + .9
 				self.lastval = rotateVal
+				#calculates the angle in radians and saves it to a list
+				self.angleR.append(self.angle*0.0174533)
 				#reads distance from Lidar
 				dist1 = self.i2c.readU8(self.distReadReg1)
 				dist2 = self.i2c.readU8(self.distReadReg2)
 				#shifts bits to get correct distance
 				self.distance = (dist1<<8) + dist2
 
-				print self.angle, self.distance, count
-				
+	
+				#Writes dynamic data to laserscan message
+				self.msg.ranges.append(self.distance)
+				#saves previous start time
+				self.datatime2 = self.datatime1
 				count = count+1
 
+		#sets pin low when scan completes
 		set_all_pins_low(self.pins)
+
+		#writes static data to laserscan message
+		#creates message header
+		#self.msg.header
+		self.msg.angle_min = self.angleR[0]
+		self.msg.angle_max = self.angleR[count-1]
+		#uses final data gathering time for the time increment between data readings
+		#taking the average over the entire period would probably be more accurate
+		self.msg.time_increment = (self.datatime1 - datatime2)
+
+		#records final time
+		#self.finishTime = rospy.get_time()
+		self.finishTime = time.clock()	#can delete later
+		#calcualtes scan time
+		self.msg.scan_time = (self.finishTime - self.startTime)
+
+		#changes variable when scan is complete
 		scanComplete = 1
 		return scanComplete	
 
 
 if __name__ == '__main__':
 
+	#ALL ROS commands are temprorarily commented out for testing purposes
+
+	#initializes the node named scanner
+	#rospy.init_node('irdistance', anonymous=True)
+	# Declare we are using the pub defined above, not a new local variable
+	#global pub
+	#pub = rospy.Publisher('/laserscan', laserscan, queue_size=10)
+
 	#creates an instance of the class
 	lScan = laserScan()
 
 	lScan.calibrate()
 
-	complete = lScan.scan()
-	print complete
+	scanComplete = 0
+	#keeps loop running
+	#while not rospy.is_shutdown():
+	while 1:
+		scanComplete = lScan.scan()
+		#pub.publish(self.msg)
+		print pub.angle_min
+		print pub.angle_max
+		print pub.angle_increment
+		print pub.time_increment
+		print pub.scan_time
+		print pub.range_min
+		print pub.range_max
+		print pub.ranges
+
+
+	#keeps the node from quitting
+	#rospy.spin()
