@@ -168,7 +168,7 @@ class laserScan(object):
 		self.msg.angle_min = (self.angleR[0]*0.0174533)
 		#changes angle to radians
 		self.msg.angle_max = (self.msg.angle_max*0.0174533)
-		
+
 		#records final time
 		self.finishTime = rospy.get_time()
 		#calcualtes scan time
@@ -180,35 +180,37 @@ class laserScan(object):
 
 
 if __name__ == '__main__':
+	try:
+		#initializes the node named scanner
+		rospy.init_node('irdistance', anonymous=True)
 
-	#initializes the node named scanner
-	rospy.init_node('irdistance', anonymous=True)
+		pub = rospy.Publisher('/scan', LaserScan, queue_size=10)
 
-	pub = rospy.Publisher('/scan', LaserScan, queue_size=10)
+		#creates an instance of the class
+		lScan = laserScan()
 
-	#creates an instance of the class
-	lScan = laserScan()
+		lScan.calibrate()
 
-	lScan.calibrate()
+		scanComplete = 0
 
-	scanComplete = 0
+		#create sequence for message
+		sequence = 0
 
-	#create sequence for message
-	sequence = 0
+		#keeps loop running
+		while not rospy.is_shutdown():
+			scanComplete = lScan.scan()
+			#creates message header
+			lScan.msg.header.seq = sequence
+			lScan.msg.header.stamp.secs = lScan.startTime
+			lScan.msg.header.frame_id = "/base_link"
 
-	#keeps loop running
-	while not rospy.is_shutdown():
-		scanComplete = lScan.scan()
-		#creates message header
-		lScan.msg.header.seq = sequence
-		lScan.msg.header.stamp.secs = lScan.startTime
-		lScan.msg.header.frame_id = "/base_link"
-
-		pub.publish(lScan.msg)
-
-
-		sequence = sequence+1
+			pub.publish(lScan.msg)
 
 
-	#keeps the node from quitting
-	rospy.spin()
+			sequence = sequence+1
+
+
+		#keeps the node from quitting
+		rospy.spin()
+	except rospy.ROSInterruptException:
+	    pass
