@@ -84,6 +84,7 @@ class laserScan(object):
 
 		#creates a variable for the ROS message and initilizes constant parameters
 		#self.msg = LaserScan()
+		#self.header = Header()
 		self.msg = None					#can delete later
 		self.msg.angle_min = 0 			#can delete later
 		self.msg.angle_max = 0 			#can delete later
@@ -168,8 +169,6 @@ class laserScan(object):
 		set_all_pins_low(self.pins)
 
 		#writes static data to laserscan message
-		#creates message header
-		#self.msg.header
 		self.msg.angle_min = self.angleR[0]
 		self.msg.angle_max = self.angleR[count-1]
 		#uses final data gathering time for the time increment between data readings
@@ -195,7 +194,7 @@ if __name__ == '__main__':
 	#rospy.init_node('irdistance', anonymous=True)
 	# Declare we are using the pub defined above, not a new local variable
 	#global pub
-	#pub = rospy.Publisher('/laserscan', laserscan, queue_size=10)
+	#pub = rospy.Publisher('/scan', LaserScan, queue_size=10)
 
 	#creates an instance of the class
 	lScan = laserScan()
@@ -203,10 +202,19 @@ if __name__ == '__main__':
 	lScan.calibrate()
 
 	scanComplete = 0
+
+	#create sequence for message
+	sequence = 0
+
 	#keeps loop running
 	#while not rospy.is_shutdown():
 	while 1:
 		scanComplete = lScan.scan()
+		#creates message header
+		#self.msg.header.seq = sequence
+		#self.msg.header.stamp = self.startTime
+		#self.msg.header.frame_id = "/base_link"
+
 		#pub.publish(self.msg)
 		print pub.angle_min
 		print pub.angle_max
@@ -216,6 +224,8 @@ if __name__ == '__main__':
 		print pub.range_min
 		print pub.range_max
 		print pub.ranges
+
+		sequence = sequence+1
 
 
 	#keeps the node from quitting
