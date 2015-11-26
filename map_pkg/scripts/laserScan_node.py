@@ -135,7 +135,7 @@ class laserScan(object):
 				#checks if the sensor is over the threshold but the last value is under the threshold
 				#if both are true the sensor has just been passe dan should now reset
 				if rotateVal > self.threshold and self.lastval<self.threshold:
-					sets angle before it gets reset
+					#sets angle before it gets reset
 					self.msg.angle_max = self.angle
 					self.angle = 0
 				else:
