@@ -38,9 +38,20 @@ def fullstep(pins, pin_index):
 	GPIO.output(pins[(pin_index+1) % 4], GPIO.LOW)
 	GPIO.output(pins[(pin_index+2) % 4], GPIO.LOW)
 
+#temporarily defines the laserscan message
+class message(object):
+	def __init__(self):
+		self.angle_min = 0 			#can delete later
+		self.angle_max = 0 			#can delete later
+		self.angle_increment = 0.015708
+		self.time_increment = 0 	#can delete later
+		self.scan_time = 0 			#can delte later
+		self.range_min = 0
+		self.range_max = 40
+		self.ranges = None
 
 class laserScan(object):
-	def __init__(self, steps_per_rev=2048.0,
+	def __init__(self,
 				 pins=["P9_27", "P8_15", "P8_11", "P8_12"]):
 
 		#sets lidar lite addresses
@@ -85,15 +96,11 @@ class laserScan(object):
 		#creates a variable for the ROS message and initilizes constant parameters
 		#self.msg = LaserScan()
 		#self.header = Header()
-		self.msg = None					#can delete later
-		self.msg.angle_min = 0 			#can delete later
-		self.msg.angle_max = 0 			#can delete later
+		self.msg = message()				#can delete later
 		self.msg.angle_increment = 0.015708
-		self.msg.time_increment = 0 	#can delete later
-		self.msg.scan_time = 0 			#can delte later
 		self.msg.range_min = 0
 		self.msg.range_max = 40
-		self.msg.ranges = None		#can delete later
+
 
 	def calibrate(self):
 		#sets angle to 1 so loop will run
