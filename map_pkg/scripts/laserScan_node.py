@@ -135,19 +135,27 @@ class laserScan(object):
 				#checks if the sensor is over the threshold but the last value is under the threshold
 				#if both are true the sensor has just been passe dan should now reset
 				if rotateVal > self.threshold and self.lastval<self.threshold:
+					sets angle before it gets reset
+					self.msg.angle_max = self.angle
 					self.angle = 0
 				else:
 					self.angle = self.angle + .9
+					#sets max angle to the most recent angle
+					self.msg.angle_max = self.angle
 				self.lastval = rotateVal
-				#calculates the angle in radians and saves it to a list
-				self.angleR.append(self.angle*0.0174533)
+				#saves angle in a list so the first angle can be recalled
+				self.angleR.append(self.angle)
 				#reads distance from Lidar
 				dist1 = self.i2c.readU8(self.distReadReg1)
 				dist2 = self.i2c.readU8(self.distReadReg2)
 				#shifts bits to get correct distance
 				self.distance = (dist1<<8) + dist2
 
-				#Writes dynamic data to laserscan message
+
+				#writes dynamic data to msg
+				#uses final data gathering time for the time increment between data readings
+				#taking the average over the entire period would probably be more accurate
+				self.msg.time_increment = (self.datatime1 - self.datatime2)
 				self.msg.ranges.append(self.distance)
 				#saves previous start time
 				self.datatime2 = self.datatime1
@@ -157,12 +165,10 @@ class laserScan(object):
 		set_all_pins_low(self.pins)
 
 		#writes static data to laserscan message
-		self.msg.angle_min = self.angleR[0]
-		self.msg.angle_max = self.angleR[count-1]
-		#uses final data gathering time for the time increment between data readings
-		#taking the average over the entire period would probably be more accurate
-		self.msg.time_increment = (self.datatime1 - self.datatime2)
-
+		self.msg.angle_min = (self.angleR[0]*0.0174533)
+		#changes angle to radians
+		self.msg.angle_max = (self.msg.angle_max*0.0174533)
+		
 		#records final time
 		self.finishTime = rospy.get_time()
 		#calcualtes scan time
