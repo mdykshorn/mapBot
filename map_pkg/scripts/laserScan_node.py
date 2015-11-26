@@ -4,14 +4,13 @@
 #imports necessary libraries
 import time
 import math
-#import rospy
-#from sensor_msgs.msg import LaserScan
-#from std_msgs.msg import Header
+import rospy
+from sensor_msgs.msg import LaserScan
+from std_msgs.msg import Header
 import Adafruit_BBIO.ADC as ADC
 import Adafruit_BBIO.GPIO as GPIO
 from Adafruit_I2C import Adafruit_I2C
 
-#ALL ROS commands are temprorarily commented out for testing purposes
 
 # Create variable so we can always see/use it, but set it to a value that indicates it's not yet valid
 pub = None
@@ -37,18 +36,6 @@ def fullstep(pins, pin_index):
 	GPIO.output(pins[(pin_index+3) % 4], GPIO.HIGH)
 	GPIO.output(pins[(pin_index+1) % 4], GPIO.LOW)
 	GPIO.output(pins[(pin_index+2) % 4], GPIO.LOW)
-
-#temporarily defines the laserscan message
-class message(object):
-	def __init__(self):
-		self.angle_min = 0 			#can delete later
-		self.angle_max = 0 			#can delete later
-		self.angle_increment = 0.015708
-		self.time_increment = 0 	#can delete later
-		self.scan_time = 0 			#can delte later
-		self.range_min = 0
-		self.range_max = 40
-		self.ranges = []
 
 class laserScan(object):
 	def __init__(self,
@@ -94,9 +81,9 @@ class laserScan(object):
 		self.angleR = []
 
 		#creates a variable for the ROS message and initilizes constant parameters
-		#self.msg = LaserScan()
-		#self.header = Header()
-		self.msg = message()				#can delete later
+		self.msg = LaserScan()
+		self.header = Header()
+
 		self.msg.angle_increment = 0.015708
 		self.msg.range_min = 0
 		self.msg.range_max = 40
@@ -125,20 +112,18 @@ class laserScan(object):
 	def scan(self):
 		#initilizes a count for number of datapoints
 		count = 0
-		#changes angle temporarily so loop will run
-		self.angle = .01
+		#changes angle slightly so loop will run
+		self.angle = .0001
 		#creates a variable that returns 1 when the scan completes
 		scanComplete = 0
-		#runs indefinitely
 		#records the start time 
-		#self.startTime = rospy.get_time()
-		self.startTime = time.clock()		#can delete later
+		self.startTime = rospy.get_time()
+		#runs while there are less than 400 data points or the angle becomes is not 0
 		while count<400 and self.angle != 0:
 	
 			for pin_index in range(len(self.pins)):
 				#gets time before first reading
-				#self.datatime1 = rospy.get_time()
-				self.datatime1 = time.clock()		#can delete later
+				self.datatime1 = rospy.get_time()
 				self.drivemode(self.pins, pin_index)
 				
 				#writes to the LIDAR to take a reading
@@ -165,7 +150,6 @@ class laserScan(object):
 				#shifts bits to get correct distance
 				self.distance = (dist1<<8) + dist2
 
-	
 				#Writes dynamic data to laserscan message
 				self.msg.ranges.append(self.distance)
 				#saves previous start time
@@ -183,8 +167,7 @@ class laserScan(object):
 		self.msg.time_increment = (self.datatime1 - self.datatime2)
 
 		#records final time
-		#self.finishTime = rospy.get_time()
-		self.finishTime = time.clock()	#can delete later
+		self.finishTime = rospy.get_time()
 		#calcualtes scan time
 		self.msg.scan_time = (self.finishTime - self.startTime)
 
@@ -195,13 +178,11 @@ class laserScan(object):
 
 if __name__ == '__main__':
 
-	#ALL ROS commands are temprorarily commented out for testing purposes
-
 	#initializes the node named scanner
-	#rospy.init_node('irdistance', anonymous=True)
+	rospy.init_node('irdistance', anonymous=True)
 	# Declare we are using the pub defined above, not a new local variable
-	#global pub
-	#pub = rospy.Publisher('/scan', LaserScan, queue_size=10)
+	global pub
+	pub = rospy.Publisher('/scan', LaserScan, queue_size=10)
 
 	#creates an instance of the class
 	lScan = laserScan()
@@ -214,26 +195,18 @@ if __name__ == '__main__':
 	sequence = 0
 
 	#keeps loop running
-	#while not rospy.is_shutdown():
-	while 1:
+	while not rospy.is_shutdown():
 		scanComplete = lScan.scan()
 		#creates message header
-		#self.msg.header.seq = sequence
-		#self.msg.header.stamp = self.startTime
-		#self.msg.header.frame_id = "/base_link"
+		self.msg.header.seq = sequence
+		self.msg.header.stamp = self.startTime
+		self.msg.header.frame_id = "/base_link"
 
-		#pub.publish(self.msg)
-		print lScan.msg.angle_min
-		print lScan.msg.angle_max
-		print lScan.msg.angle_increment
-		print lScan.msg.time_increment
-		print lScan.msg.scan_time
-		print lScan.msg.range_min
-		print lScan.msg.range_max
-		print lScan.msg.ranges
+		pub.publish(self.msg)
+
 
 		sequence = sequence+1
 
 
 	#keeps the node from quitting
-	#rospy.spin()
+	rospy.spin()
