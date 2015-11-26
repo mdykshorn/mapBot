@@ -48,7 +48,7 @@ class message(object):
 		self.scan_time = 0 			#can delte later
 		self.range_min = 0
 		self.range_max = 40
-		self.ranges[]
+		self.ranges = []
 
 class laserScan(object):
 	def __init__(self,
@@ -91,7 +91,7 @@ class laserScan(object):
 		self.datatime1 = 0.0
 		self.datatime2 = 0.0
 		#creates a list of all angles throughout the scan (saves angle in radians)
-		self.angleR[]
+		self.angleR = []
 
 		#creates a variable for the ROS message and initilizes constant parameters
 		#self.msg = LaserScan()
