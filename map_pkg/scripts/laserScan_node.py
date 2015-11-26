@@ -180,7 +180,7 @@ class laserScan(object):
 		self.msg.angle_max = self.angleR[count-1]
 		#uses final data gathering time for the time increment between data readings
 		#taking the average over the entire period would probably be more accurate
-		self.msg.time_increment = (self.datatime1 - datatime2)
+		self.msg.time_increment = (self.datatime1 - self.datatime2)
 
 		#records final time
 		#self.finishTime = rospy.get_time()
