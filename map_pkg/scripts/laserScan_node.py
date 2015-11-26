@@ -195,7 +195,7 @@ if __name__ == '__main__':
 		scanComplete = lScan.scan()
 		#creates message header
 		lScan.msg.header.seq = sequence
-		lScan.msg.header.stamp = lScan.startTime
+		lScan.msg.header.stamp.secs = lScan.startTime
 		lScan.msg.header.frame_id = "/base_link"
 
 		pub.publish(lScan.msg)
