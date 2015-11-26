@@ -133,7 +133,7 @@ class laserScan(object):
 		#records the start time 
 		#self.startTime = rospy.get_time()
 		self.startTime = time.clock()		#can delete later
-		while count<400 or self.angle != 0:
+		while count<400 and self.angle != 0:
 	
 			for pin_index in range(len(self.pins)):
 				#gets time before first reading
