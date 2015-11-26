@@ -93,6 +93,7 @@ class laserScan(object):
 			# sets ammount of steps for each time function is called
 			steps = 4
 			self.direction = 1
+			lastval = none
 		
 			while step < steps:
 				for pin_index in range(len(self.pins)):
@@ -103,10 +104,11 @@ class laserScan(object):
 					#checks for when the sensor triggers 0 angle calibration
 					#reads value from sensor
 					rotateVal = ADC.read("P9_39")
-					if rotateVal < self.threshold:
+					if rotateVal > self.threshold and lastval<self.threshold:
 						self.angle = 0
 					else:
 						self.angle = self.angle + .9
+					lastval = rotateVal
 
 
 			#read data from LIDAR
