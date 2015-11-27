@@ -215,7 +215,7 @@ int main(int argc, char **argv)
 		//IMU Message
 		//sets up header for IMU message
 		msgIMU.header.seq = count;
-		msgIMU.header.stamp.sec = ros::Time::now();
+		msgIMU.header.stamp.sec = ros::Time::now().toSec();
 		msgIMU.header.frame_id = "/base_link";
 		//adds data to the sensor message
 		//orientation
@@ -238,14 +238,14 @@ int main(int argc, char **argv)
 		//Magnetometer Message
 		//sets up header
 		msgMAG.header.seq = count;
-		msgMAG.header.stamp.sec = ros::Time::now();
-		msgMAG.header.fram_id = "base_link";
+		msgMAG.header.stamp.sec = ros::Time::now().toSec();
+		msgMAG.header.frame_id = "base_link";
 		//adds data to magnetic field message
 		msgMAG.magnetic_field.x = mpu.calibratedMag[VEC3_X];
 		msgMAG.magnetic_field.y = mpu.calibratedMag[VEC3_Y];
 		msgMAG.magnetic_field.z = mpu.calibratedMag[VEC3_Z];
 		//fills the list with zeros as per message spec when no covariance is known
-		msgMAG.magnetic_field_covariance[9] = {0};
+		msgMAG.magnetic_field_covariance[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	}
 
