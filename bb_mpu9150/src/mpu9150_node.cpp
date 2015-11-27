@@ -45,10 +45,6 @@
 
 int set_cal(int mag, char *cal_file);
 void read_loop(unsigned int sample_rate);
-void print_fused_euler_angles(mpudata_t *mpu);
-void print_fused_quaternion(mpudata_t *mpu);
-void print_calibrated_accel(mpudata_t *mpu);
-void print_calibrated_mag(mpudata_t *mpu);
 void register_sig_handler();
 void sigint_handler(int sig);
 
@@ -239,7 +235,7 @@ int main(int argc, char **argv)
 		//sets up header
 		msgMAG.header.seq = count;
 		msgMAG.header.stamp.sec = ros::Time::now().toSec();
-		msgMAG.header.frame_id = "base_link";
+		msgMAG.header.frame_id = "/base_link";
 		//adds data to magnetic field message
 		msgMAG.magnetic_field.x = mpu.calibratedMag[VEC3_X];
 		msgMAG.magnetic_field.y = mpu.calibratedMag[VEC3_Y];
@@ -259,46 +255,6 @@ int main(int argc, char **argv)
   return 0;
 }
 
-void print_fused_euler_angles(mpudata_t *mpu)
-{
-	printf("\rX: %0.0f Y: %0.0f Z: %0.0f        ",
-			mpu->fusedEuler[VEC3_X] * RAD_TO_DEGREE, 
-			mpu->fusedEuler[VEC3_Y] * RAD_TO_DEGREE, 
-			mpu->fusedEuler[VEC3_Z] * RAD_TO_DEGREE);
-
-	fflush(stdout);
-}
-
-void print_fused_quaternions(mpudata_t *mpu)
-{
-	printf("\rW: %0.2f X: %0.2f Y: %0.2f Z: %0.2f        ",
-			mpu->fusedQuat[QUAT_W],
-			mpu->fusedQuat[QUAT_X],
-			mpu->fusedQuat[QUAT_Y],
-			mpu->fusedQuat[QUAT_Z]);
-
-	fflush(stdout);
-}
-
-void print_calibrated_accel(mpudata_t *mpu)
-{
-	printf("\rX: %05d Y: %05d Z: %05d        ",
-			mpu->calibratedAccel[VEC3_X], 
-			mpu->calibratedAccel[VEC3_Y], 
-			mpu->calibratedAccel[VEC3_Z]);
-
-	fflush(stdout);
-}
-
-void print_calibrated_mag(mpudata_t *mpu)
-{
-	printf("\rX: %03d Y: %03d Z: %03d        ",
-			mpu->calibratedMag[VEC3_X], 
-			mpu->calibratedMag[VEC3_Y], 
-			mpu->calibratedMag[VEC3_Z]);
-
-	fflush(stdout);
-}
 
 int set_cal(int mag, char *cal_file)
 {
