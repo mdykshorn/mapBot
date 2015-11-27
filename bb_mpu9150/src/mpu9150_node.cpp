@@ -79,9 +79,9 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "mpu9150_node");
   ros::NodeHandle n;
   //creates publisher of IMU message
-  ros::Publisher pub = n.advertise<sensor_msgs::IMU>("imu/data_raw", 1000);
+  ros::Publisher pub = n.advertise<sensor_msgs::Imu>("imu/data_raw", 1000);
   //creates publisher of Magnetic FIeld message
-  ros::Publisher pubM = n.advertise<sensor_msgs::MagneticField>("imu/mag", 1000)
+  ros::Publisher pubM = n.advertise<sensor_msgs::MagneticField>("imu/mag", 1000);
   ros::Rate loop_rate(10);
 
   /* Init the sensor the values are hardcoded at the local_defaults.h file */
@@ -201,7 +201,7 @@ int main(int argc, char **argv)
   {
   	//creates objects of each message type
   	//IMU Message
-    sensor_msgs::IMU msgIMU;
+    sensor_msgs::Imu msgIMU;
     std_msgs::String header;
     geometry_msgs::Quaternion orientation;
     geometry_msgs::Vector3 angular_velocity;
