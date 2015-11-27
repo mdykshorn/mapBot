@@ -184,9 +184,9 @@ int main(int argc, char **argv)
 		return -1;
 
     // ROS loop config
-	loop_delay = (1000 / sample_rate) - 2;
-	printf("\nEntering MPU read loop (ctrl-c to exit)\n\n");
-	linux_delay_ms(loop_delay);
+	//loop_delay = (1000 / sample_rate) - 2;
+	//printf("\nEntering MPU read loop (ctrl-c to exit)\n\n");
+	//linux_delay_ms(loop_delay);
 
   /**
    * A count of how many messages we have sent. This is used to create
