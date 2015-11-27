@@ -245,7 +245,7 @@ int main(int argc, char **argv)
 		msgMAG.magnetic_field.y = mpu.calibratedMag[VEC3_Y];
 		msgMAG.magnetic_field.z = mpu.calibratedMag[VEC3_Z];
 		//fills the list with zeros as per message spec when no covariance is known
-		msgMAG.magnetic_field_covariance[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+		//msgMAG.magnetic_field_covariance[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	}
 
