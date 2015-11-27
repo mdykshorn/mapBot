@@ -6,10 +6,10 @@
  *    Description: ROS package that launches a node and publishes the Invensense MPU-9150 to a Topic  
  *
  *        Version:  1.1
- *        Created:  27/07/13 15:06:50
- *       Revision:  Morgan Dykshorn 11/26/15 mdd27@vt.edu
+ *        Created:  11/26/15
+ *       Revision:  
  *
- *         Author:  Víctor Mayoral Vilches <v.mayoralv@gmail.com>
+ *         Author:  Morgan Dykshorn <mdd27@vt.edu>
  *
  * =====================================================================================
  */
@@ -42,14 +42,13 @@
     }
 #endif
 
-
+//calibration function
 int set_cal(int mag, char *cal_file);
+//
 void register_sig_handler();
 void sigint_handler(int sig);
 
 int done;
-
-
 
 int main(int argc, char **argv)
 {
@@ -69,7 +68,7 @@ int main(int argc, char **argv)
 	int verbose = 0;
 	char *mag_cal_file = NULL;
 	char *accel_cal_file = NULL;
-	unsigned long loop_delay;
+	//creates object of mpudata_t
 	mpudata_t mpu;
 
 
@@ -84,14 +83,9 @@ int main(int argc, char **argv)
 		free(accel_cal_file);
 	if (mag_cal_file)
 		free(mag_cal_file);
-	memset(&mpu, 0, sizeof(mpudata_t));
+
 	if (sample_rate == 0)
 		return -1;
-
-    // ROS loop config
-	//loop_delay = (1000 / sample_rate) - 2;
-	//printf("\nEntering MPU read loop (ctrl-c to exit)\n\n");
-	//linux_delay_ms(loop_delay);
 
   /**
    * A count of how many messages we have sent. This is used to create
@@ -147,7 +141,6 @@ int main(int argc, char **argv)
 		msgMAG.magnetic_field.z = mpu.calibratedMag[VEC3_Z];
 		//fills the list with zeros as per message spec when no covariance is known
 		//msgMAG.magnetic_field_covariance[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-
 	}
 
 	//publish both messages
@@ -157,6 +150,7 @@ int main(int argc, char **argv)
     loop_rate.sleep();
     ++count;
   }
+  mpu9150_exit();
   return 0;
 }
 
