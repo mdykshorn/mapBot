@@ -157,7 +157,8 @@ class laserScan(object):
 				
 				#serial read for distance
 				#reads distance value from serial in meters
-				self.distance = float(self.serial_port.read(3))
+				serial_output = self.serial_port.readline()
+				self.distance = map(float, serial_output.strip().split('\r\n'))
 				
 				#IR sensor reading
 				
