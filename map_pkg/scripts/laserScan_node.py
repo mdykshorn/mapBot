@@ -151,7 +151,7 @@ class laserScan(object):
 				voltage = ADC.read("P9_40")
 				#converts voltage values into distance(meters)
 				self.distance = (voltage**-.8271732796)
-				self.distance = distance*.1679936709
+				self.distance = self.distance*.1679936709
 				#checks and discards data outside of accurate range
 				if self.distance>2:
 					self.distance = 2
