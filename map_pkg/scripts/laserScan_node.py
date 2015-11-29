@@ -47,7 +47,7 @@ class laserScan(object):
 		#self.distReadReg2 = 0x10
 		
 		#initilizes the serial port for reading distance values
-		serial_port = serial.Serial("/dev/ACM0", baudrate=115200, timeout = 1)
+		serial_port = serial.Serial("/dev/ttyACM0", baudrate=115200, timeout = 1)
 
 		#initilizes the i2c bus on address lidar lite address on bus 1
 		#self.i2c = Adafruit_I2C(self.address, 1)
@@ -157,7 +157,7 @@ class laserScan(object):
 				
 				#serial read for distance
 				#reads distance value from serial in meters
-				self.distance = serial_port.read()
+				self.distance = serial_port.readline()
 				
 				
 				#IR sensor reading
