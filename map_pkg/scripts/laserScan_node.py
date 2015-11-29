@@ -46,7 +46,7 @@ class laserScan(object):
 		self.distReadReg2 = 0x10
 
 		#initilizes the i2c bus on address lidar lite address on bus 1
-		self.i2c = Adafruit_I2C(self.address, 1)
+		#self.i2c = Adafruit_I2C(self.address, 1)
 		
 		#creates pins for the stepper motors
 		self.pins = pins
@@ -125,7 +125,7 @@ class laserScan(object):
 				
 				#writes to the LIDAR to take a reading
 				#writes to the register that takes measurment
-				self.i2c.write8(self.distWriteReg, self.distWriteVal)
+				#self.i2c.write8(self.distWriteReg, self.distWriteVal)
 				#waits for 'x' seconds to control motor speed and prevent sensor overpolling(minimum sleep time is .0025)
 				time.sleep(.01)
 				
@@ -145,11 +145,26 @@ class laserScan(object):
 				self.lastval = rotateVal
 				#saves angle in a list so the first angle can be recalled
 				self.angleR.append(self.angle)
+				
+				#reads from ir sensor
+				#reads voltage value
+				voltage = ADC.read("P9_40")
+				#converts voltage values into distance(meters)
+				self.distance = (voltage**-.8271732796)
+				self.distance = distance*.1679936709
+				#checks and discards data outside of accurate range
+				if self.distance>2:
+					self.distance = 2
+				elif self.distance<.15:
+					self.distance = .15
+					
+					
+				#i2c read isn't working
 				#reads distance from Lidar
-				dist1 = self.i2c.readU8(self.distReadReg1)
-				dist2 = self.i2c.readU8(self.distReadReg2)
+				#dist1 = self.i2c.readU8(self.distReadReg1)
+				#dist2 = self.i2c.readU8(self.distReadReg2)
 				#shifts bits to get correct distance
-				self.distance = (dist1<<8) + dist2
+				#self.distance = (dist1<<8) + dist2
 
 
 				#writes dynamic data to msg
