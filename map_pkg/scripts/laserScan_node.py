@@ -111,7 +111,9 @@ class laserScan(object):
 				rotateVal = ADC.read("P9_39")
 				if rotateVal > self.threshold and self.lastval<self.threshold:
 					self.angle = 0
-				self.lastval = rotateVal			
+				self.lastval = rotateVal
+				#throws out a serial data value
+				self.serial_port.readline()			
 		set_all_pins_low(self.pins)	
 
 	
