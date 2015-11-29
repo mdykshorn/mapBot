@@ -5,6 +5,7 @@
 import time
 import math
 import rospy
+import serial
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Header
 import Adafruit_BBIO.ADC as ADC
@@ -39,11 +40,14 @@ class laserScan(object):
 				 pins=["P9_27", "P8_15", "P8_11", "P8_12"]):
 
 		#sets lidar lite addresses
-		self.address = 0x62
-		self.distWriteReg = 0x00
-		self.distWriteVal = 0x04
-		self.distReadReg1 = 0x8f
-		self.distReadReg2 = 0x10
+		#self.address = 0x62
+		#self.distWriteReg = 0x00
+		#self.distWriteVal = 0x04
+		#self.distReadReg1 = 0x8f
+		#self.distReadReg2 = 0x10
+		
+		#initilizes the serial port for reading distance values
+		serial_port = serial.Serial("/dev/tty01", baudrate=115200, timeout = 1)
 
 		#initilizes the i2c bus on address lidar lite address on bus 1
 		#self.i2c = Adafruit_I2C(self.address, 1)
@@ -55,6 +59,8 @@ class laserScan(object):
 		initialize_pins(self.pins)
 		set_all_pins_low(self.pins)
 		
+		#initlizes pins for 
+		
 		#sets angle to 0
 		self.angle = 0
 		
@@ -63,17 +69,20 @@ class laserScan(object):
 
 		#sets up ADC
 		ADC.setup()
+		
 		#cretes a value for the threshold
 		self.threshold = .2
 		#creates a variable for the distance measurment
 		self.distance = 0
 		#creates a variable for the last ir sensor read
 		self.lastval = 1
+		
 		#creates variables for time
 		self.startTime = 0.0
 		self.finishTime = 0.0
 		self.datatime1 = 0.0
 		self.datatime2 = 0.0
+		
 		#creates a list of all angles throughout the scan (saves angle in radians)
 		self.angleR = []
 
@@ -127,7 +136,7 @@ class laserScan(object):
 				#writes to the register that takes measurment
 				#self.i2c.write8(self.distWriteReg, self.distWriteVal)
 				#waits for 'x' seconds to control motor speed and prevent sensor overpolling(minimum sleep time is .0025)
-				time.sleep(.0025)
+				time.sleep(.01)
 				
 				#checks for when the sensor triggers 0 angle calibration
 				#reads value from sensor
@@ -146,17 +155,24 @@ class laserScan(object):
 				#saves angle in a list so the first angle can be recalled
 				self.angleR.append(self.angle)
 				
+				#serial read for distance
+				#reads distance value from serial in meters
+				self.distance = serial_port.read()
+				
+				
+				#IR sensor reading
+				
 				#reads from ir sensor
 				#reads voltage value
-				voltage = ADC.read("P9_40")
+				#voltage = ADC.read("P9_40")
 				#converts voltage values into distance(meters)
-				self.distance = (voltage**-.8271732796)
-				self.distance = self.distance*.1679936709
+				#self.distance = (voltage**-.8271732796)
+				#self.distance = self.distance*.1679936709
 				#checks and discards data outside of accurate range
-				if self.distance>2:
-					self.distance = 2
-				elif self.distance<.15:
-					self.distance = .15
+				#if self.distance>2:
+				#	self.distance = 2
+				#elif self.distance<.15:
+				#	self.distance = .15
 					
 					
 				#i2c read isn't working
