@@ -1,6 +1,6 @@
 //laserScan Class Morgan Dykshorn
 #include <Arduino.h>
-//#include "LIDARLite.h"
+#include <LIDARLite.h>
 
 class laserScan
 {
