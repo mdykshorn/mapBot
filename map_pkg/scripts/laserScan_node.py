@@ -46,8 +46,6 @@ class laserScan(object):
 		#self.distReadReg1 = 0x8f
 		#self.distReadReg2 = 0x10
 		
-		#initilizes the serial port for reading distance values
-		self.serial_port = serial.Serial("/dev/ttyACM0", baudrate=115200, timeout = 1)
 
 		#initilizes the i2c bus on address lidar lite address on bus 1
 		#self.i2c = Adafruit_I2C(self.address, 1)
@@ -157,25 +155,19 @@ class laserScan(object):
 				#saves angle in a list so the first angle can be recalled
 				self.angleR.append(self.angle)
 				
-				#serial read for distance
-				#reads distance value from serial in meters
-				serial_output = self.serial_port.readline()
-				print(repr(serial_output))
-				self.distance = map(float, serial_output.strip().split('\r\n'))
-				
 				#IR sensor reading
 				
 				#reads from ir sensor
 				#reads voltage value
-				#voltage = ADC.read("P9_40")
+				voltage = ADC.read("P9_40")
 				#converts voltage values into distance(meters)
-				#self.distance = (voltage**-.8271732796)
-				#self.distance = self.distance*.1679936709
+				self.distance = (voltage**-.8271732796)
+				self.distance = self.distance*.1679936709
 				#checks and discards data outside of accurate range
-				#if self.distance>2:
-				#	self.distance = 2
-				#elif self.distance<.15:
-				#	self.distance = .15
+				if self.distance>2:
+					self.distance = 2
+				elif self.distance<.15:
+					self.distance = .15
 					
 					
 				#i2c read isn't working
