@@ -51,9 +51,9 @@ float timeIncrement = 0.0;
 float scanTime = 0.0;
 
 //public functions
-void laserScan::calibrate(const LIDARLite lidar)
+void laserScan::calibrate(LIDARLite& lidar)
 {
-	//initilizes the lidar
+	//initializes the lidar
 	lidar.begin(1, true);
 	//sets angle to not be zero so loop will run
 	laserScan::angle = 1.0;
@@ -79,9 +79,9 @@ void laserScan::calibrate(const LIDARLite lidar)
 	laserScan::set_all_pins_low();
 }	
 
-void laserScan::scan(const LIDARLite lidar)
+void laserScan::scan(LIDARLite& lidar)
 {
-	//initilizes count
+	//initializes count
 	int count = 0;
 	float rotateVal = 0.0;
 	//sets angle slightly above 0 so loop will run

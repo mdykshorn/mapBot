@@ -2,6 +2,10 @@
 #include <Arduino.h>
 #include <LIDARLite.h>
 
+#ifndef _laserScan_H_
+#define _laserScan_H_
+
+
 class laserScan
 {
 	public:
@@ -13,8 +17,8 @@ class laserScan
 		float timeIncrement;
 		float scanTime;
 		
-		void calibrate(const LIDARLite lidar);
-		void scan(const LIDARLite lidar);
+		void calibrate(LIDARLite& lidar);
+		void scan(LIDARLite& lidar);
 		
 	private:
 		
@@ -36,3 +40,4 @@ class laserScan
 		void set_all_pins_low();
 		void fullstep(int pins[], int pin_index);
 };
+#endif
