@@ -1,31 +1,26 @@
 //laserScan Class Morgan Dykshorn
 #include <Arduino.h>
-#include <Wire.h>
-#include <LIDARLite.h>
-
-class LIDARLite;
+//#include "LIDARLite.h"
 
 class laserScan
 {
 	public:
 		laserScan();
 
-		float ranges;
+		float ranges[];
 		float angle_min;
 		float angle_max;
 		float timeIncrement;
 		float scanTime;
 		
-		void calibrate();
-		void scan(lidar);
+		void calibrate(const LIDARLite lidar);
+		void scan(const LIDARLite lidar);
 		
 	private:
-	
-		LIDARLite lidar;
 		
-		int pin_index;
+
 		//sets pins
-		int pins;
+		int pins[];
 		float angle;
 		float threshold;
 		float distance;
@@ -36,8 +31,8 @@ class laserScan
 		float datatime1;
 		float datatime2;
 		
-		float angleR;
+		float angleR[];
 	
-		void wavedrive(int pins, int pin_index);
-		void fullstep(int pins, int pin_index);
+		void set_all_pins_low();
+		void fullstep(int pins[], int pin_index);
 };
