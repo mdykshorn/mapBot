@@ -36,7 +36,7 @@
   start I2C transaction, reading one byte from the device.
 */
 int main(void) {
-  uint16_t init_sequence1[] = {0xc4, 0x00, 0};
+  //uint16_t init_sequence1[] = {0xc4, 0x00, 0};
   uint16_t init_sequence2[] = {0xc4, 0x00, 4};
   uint16_t init_sequence3[] = {0xc5, 0x8f, I2C_READ};
   uint8_t status;
@@ -45,8 +45,8 @@ int main(void) {
 
   i2c_handle = i2c_open(1);
 
-  printf("Opened bus, result=%d\n", i2c_handle);
-  result = i2c_send_sequence(i2c_handle, init_sequence1, 3, 0);
+  //printf("Opened bus, result=%d\n", i2c_handle);
+  //result = i2c_send_sequence(i2c_handle, init_sequence1, 3, 0);
   printf("Sequence processed, result=%d\n", result);
   result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
   printf("Sequence processed, result=%d\n", result);
