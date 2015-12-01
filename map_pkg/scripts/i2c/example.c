@@ -36,8 +36,8 @@
   start I2C transaction, reading one byte from the device.
 */
 int main(void) {
-  uint16_t init_sequence1[] = {0xc4, 0x00, 0x00};
-  uint16_t init_sequence2[] = {0xc4, 0x00, 0x04};
+  uint16_t init_sequence1[] = {0xc4, 0x00, 0};
+  uint16_t init_sequence2[] = {0xc4, 0x00, 4};
   uint16_t init_sequence3[] = {0xc5, 0x8f, I2C_READ};
   uint8_t status;
   int i2c_handle;
