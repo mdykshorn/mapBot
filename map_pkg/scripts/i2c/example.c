@@ -36,9 +36,9 @@
   start I2C transaction, reading one byte from the device.
 */
 int main(void) {
-  uint16_t init_sequence1[] = {0x70, 0x80, 3};
-  uint16_t init_sequence2[] = {0x70, 0x81, 3};
-  uint16_t pn_query[] = {0x70, 0x8a, I2C_RESTART, 0x71, I2C_READ};
+  uint16_t init_sequence1[] = {0xc4, 0x00, 0x00};
+  uint16_t init_sequence2[] = {0xc4, 0x00, 0x04};
+  uint16_t init_sequence3[] = {0xc5, 0x8f, I2C_READ};
   uint8_t status;
   int i2c_handle;
   int result;
@@ -50,7 +50,7 @@ int main(void) {
   printf("Sequence processed, result=%d\n", result);
   result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
   printf("Sequence processed, result=%d\n", result);
-  result = i2c_send_sequence(i2c_handle, pn_query, 5, &status);
+  result = i2c_send_sequence(i2c_handle, init_sequence3, 3, &status);
   printf("Sequence processed, result=%d\n", result);
   printf("Status=%d\n", (int)(status));
 
