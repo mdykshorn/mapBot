@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "lsquaredc.h"
+#include <unistd.h>
 
 /*
   An example of how to use the lsquaredc library. The code below talks to a SFH7773 light/proximity sensor. It opens the
@@ -56,7 +57,7 @@ int main(void) {
     printf("Sequence processed, result=%d\n", result);
     result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
     printf("Sequence processed, result=%d\n", result);
-    delay(500);
+    sleep(.5);
     result = i2c_send_sequence(i2c_handle, dist_query, 4, (uint8_t*)(&distance));
     //result1 = i2c_send_sequence(i2c_handle, dist_query1, 4, &distanceArray[1]);
     printf("Sequence processed, result=%d\n", result);
