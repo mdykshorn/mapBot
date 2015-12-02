@@ -41,7 +41,7 @@ int main(void) {
   uint16_t init_sequence2[] = {0xc4, 0x00, 0x04}; //takes aquisition & correlation with DC correction
   uint16_t dist_query[] = {0xc5, 0x0f, I2C_READ}; //reads 2 byte from 0x8f
   uint16_t dist_query1[] = {0xc5, 0x10, I2C_READ}; //reads 1 byte from 0x10
-  uint16_t distanceArray[2];
+  int distanceArray[2];
   int i2c_handle;
   int result;
   //int result1;
