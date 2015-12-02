@@ -1,7 +1,10 @@
 //laserScan Class Morgan Dykshorn
 #include <Lidar.h>
 #include "ros/ros.h"
-//#include <Stepper.h>
+#include "BlackADC.h"
+#include "SimpleGPIO.h"
+
+
 
 #ifndef _laserScan_H_
 #define _laserScan_H_
@@ -12,8 +15,8 @@ class laserScan
 	public:
 		laserScan();
 
-		void calibrate(Lidar& lidar, Stepper& motor);
-		void scan(Lidar& lidar, Stepper& motor);
+		void calibrate(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0));
+		void scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0);
 		float getAngle_min();
 		float getAngle_max();
 		float getTime_increment();
@@ -27,7 +30,7 @@ class laserScan
 		float angle;
 		float threshold;
 		float distance;
-		float lastval;
+		int lastval;
 		float startTime;
 		float finishTime;
 		float datatime1;
@@ -39,6 +42,8 @@ class laserScan
 		float scanTime;
 		float ranges[];
 		
+		void initialize_pins();
 		void set_all_pins_low();
+		void fullstep(int pin_index);
 };
 #endif

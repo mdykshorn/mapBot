@@ -1,73 +1,96 @@
 //laserScan class
-#include <LIDARLite.h>
+#include <Lidar.h>
 #include "ros/ros.h"
-//#include <Stepper.h>
+#include "BlackADC.h"
+#include "SimpleGPIO.h"
 #include "laserScan.h"
 
 
 //default constructor
 laserScan::laserScan()
 {
-	float laserScan::angle = 0;
+	float laserScan::angle = 0.0;
 	float laserScan::threshold = 570;
-	float laserScan::distance = 0;
-	float laserScan::lastval = 600;
-	float laserScan::startTime = 0;
-	float laserScan::finishTime = 0;
-	float laserScan::datatime1 = 0;
-	float laserScan::datatime2 = 0;
-	float laserScan::angleR [400] = {};
-	float laserScan::angle_min = 0;
-	float laserScan::angle_max = 0;
-	float laserScan::timeIncrement = 0;
-	float laserScan::scanTime = 0;
+	float laserScan::distance = 0.0;
+	int laserScan::lastval = 600;
+	float laserScan::startTime = 0.0;
+	float laserScan::finishTime = 0.0;
+	float laserScan::datatime1 = 0.0;
+	float laserScan::datatime2 = 0.0;
+	float laserScan::angle_min = 0.0;
+	float laserScan::angle_max = 0.0;
+	float laserScan::timeIncrement = 0.0;
+	float laserScan::scanTime = 0.0;
 	float laserScan::ranges[400] = {};
 }
+//need to figure out pin values
+void laserScan::initialize_pins()
+{
+	//initilizes pins
+	gpio_omap_mux_setup("gpmc_ad7", "07"); 	//gpio 39 P8pin# 4
+	gpio_omap_mux_setup("gpmc_ad10", "07"); //gpio 26 P8pin#14
+	gpio_omap_mux_setup("gpmc_ad6", "07"); 	//gpio 38 P8pin# 3
+	gpio_omap_mux_setup("gpmc_ad2", "07"); 	//gpio 34 P8pin# 5
+}
 
-//Needs Updating to Beaglebone pin values
+//Needs confirmation of correct function use
 void laserScan::set_all_pins_low()
 {
-  digitalWrite(13, LOW);
-  digitalWrite(12, LOW);
-  digitalWrite(11, LOW);
-  digitalWrite(10, LOW);
+	//sets all pins low
+	gpio_set_value(27, LOW);
+	gpio_set_value(15, LOW);
+	gpio_set_value(11, LOW);
+	gpio_set_value(12, LOW);
+}
+
+//steps pins
+//Needs confirmation of correct function use
+void fullstep(int pin_index)
+{
+	int pins[] = {27, 11, 15, 12}
+	gpio_set_value(pins[pin_index], HIGH);
+	gpio_set_value(pins[(pin_index+3) % 4], HIGH);
+	gpio_set_value(pins[(pin_index+1) % 4], LOW);
+	gpio_set_value(pins[(pin_index+2) % 4], LOW);
 }
 
 //public functions
-void laserScan::calibrate(Lidar& lidar, Stepper& motor)
+void laserScan::calibrate(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0))
 {
 	//sets angle to not be zero so loop will run
 	laserScan::angle = 1.0;
 	//initilizes rotateVal, the value from the IR sensor
-	float rotateVal = 0.0;
+	int rotateVal = 0;
 	//initilizes the LIDARLite
 	lidar.begin(1);
 	
 	while (laserScan::angle!=0)
 	{
-		//need to fix stepper functions
-		//moves stepper
-		motor.step(1);
-		//waits
-		//delay(2.5);
-		//need to implement adc read for Beaglebone
-		//checks the ADC sensor
-		rotateVal = analogRead(5);
-		if (laserScan::lastval < laserScan::threshold && rotateVal > laserScan::threshold)
+		for (int pin_index; pin_index++; pin_index<4)
 		{
-			laserScan::angle = 0;
+			//steps motor
+			laserScan::fullstep(pin_index);
+			//waits
+			delay(2.5);
+	
+			//checks the ADC sensor
+			rotateVal = analog.getNumericValue();
+			if (laserScan::lastval < laserScan::threshold && rotateVal > laserScan::threshold)
+			{
+				laserScan::angle = 0;
+			}
+			laserScan::lastval = rotateVal;	
 		}
-		laserScan::lastval = rotateVal;	
 	}
 	laserScan::set_all_pins_low();
 }	
 
 //function needs to pass in ros time
-void laserScan::scan(Lidar& lidar, Stepper& motor, )
+void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0), )
 {
 	//initializes count
 	int count = 0;
-	float rotateVal = 0.0;
+	int rotateVal = 0;
 	//sets angle slightly above 0 so loop will run
 	laserScan::angle = 0.001;
 	//records start time
@@ -75,39 +98,38 @@ void laserScan::scan(Lidar& lidar, Stepper& motor, )
 	//runs while there are less than 400 data points or the angle is not 0
 	while(count<400 && laserScan::angle != 0)
 	{
-
 		laserScan::datatime1 = millis();
-		//moves stepper
-		motor.step(1);
-		//waits
-		delay(2.5);
-		//checks the ADC sensor
-		rotateVal = analogRead(5);
-		if (laserScan::lastval < laserScan::threshold && rotateVal > laserScan::threshold)
+		for (int pin_index; pin_index++; pin_index<4)
 		{
-			laserScan::angle_max = laserScan::angle;
-			laserScan::angle = 0;
-		}
-		else
-		{
-			laserScan::angle = laserScan::angle + .9;
-			laserScan::angle_max = laserScan::angle;
-		}
-		laserScan::lastval = rotateVal;
-		laserScan::angleR[count] = laserScan::angle;
-		
+			//steps motor
+			laserScan::fullstep(pin_index);
+			//waits
+			delay(10);
+			//checks the ADC sensor
+			rotateVal = analog.getNumericValue();
+			if (laserScan::lastval < laserScan::threshold && rotateVal > laserScan::threshold)
+			{
+				laserScan::angle = 0;
+			}
+			else
+			{
+				laserScan::angle = laserScan::angle + .9;
+			}
+			laserScan::lastval = rotateVal;
 
-		//read LIDARLite
-		laserScan::ranges[count] = lidar.distance();
+			//read LIDARLite
+			laserScan::ranges[count] = lidar.distance();
 			
-		laserScan::timeIncrement = (laserScan::datatime1 - laserScan::datatime2);
-		laserScan::datatime2 = laserScan::datatime1;
-		count++;
+			laserScan::timeIncrement = (laserScan::datatime1 - laserScan::datatime2);
+			laserScan::datatime2 = laserScan::datatime1;
+			//increments count
+			count++;
+		}
 	}
 	laserScan::set_all_pins_low();
-	laserScan::angle_min = (laserScan::angleR[0]*0.0174533);
-	
-	laserScan::angle_max = (laserScan::angle_max*0.0174533);
+	//hardcodes min and max angle - actual value can deviate by +-1 degree but it is negligible in the scan
+	laserScan::angle_min = (.0157077);
+	laserScan::angle_max = (6.28308);
 	
 	laserScan::finishTime = millis();
 	
