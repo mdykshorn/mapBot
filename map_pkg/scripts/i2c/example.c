@@ -52,7 +52,7 @@ int main(void) {
   printf("Sequence processed, result=%d\n", result);
   result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
   printf("Sequence processed, result=%d\n", result);
-  result = i2c_send_sequence(i2c_handle, dist_query, 4, reinterpret_cast<uint8_t*>(&distance));
+  result = i2c_send_sequence(i2c_handle, dist_query, 4, (uint8_t*)(&distance));
   //result1 = i2c_send_sequence(i2c_handle, dist_query1, 4, &distanceArray[1]);
   printf("Sequence processed, result=%d\n", result);
   //printf("Sequence processed, result=%d\n", result1);
