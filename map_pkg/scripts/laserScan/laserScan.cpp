@@ -94,11 +94,10 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0), )
 	//sets angle slightly above 0 so loop will run
 	laserScan::angle = 0.001;
 	//records start time
-	laserScan::startTime = millis();
+	laserScan::startTime = ros::Time::now();
 	//runs while there are less than 400 data points or the angle is not 0
 	while(count<400 && laserScan::angle != 0)
 	{
-		laserScan::datatime1 = millis();
 		for (int pin_index; pin_index++; pin_index<4)
 		{
 			//steps motor
@@ -120,8 +119,6 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0), )
 			//read LIDARLite
 			laserScan::ranges[count] = lidar.distance();
 			
-			laserScan::timeIncrement = (laserScan::datatime1 - laserScan::datatime2);
-			laserScan::datatime2 = laserScan::datatime1;
 			//increments count
 			count++;
 		}
@@ -131,9 +128,11 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0), )
 	laserScan::angle_min = (.0157077);
 	laserScan::angle_max = (6.28308);
 	
-	laserScan::finishTime = millis();
+	laserScan::finishTime = ros::Time::now();
 	
 	laserScan::scanTime = (laserScan::finishTime - laserScan::startTime);
+	//caluclates time between data points
+	laserScan::timeIncrement = laserScan::scanTime/count;
 }
 //getter functions for returning variables
 float laserScan::getAngle_min()
