@@ -36,23 +36,29 @@
   start I2C transaction, reading one byte from the device.
 */
 int main(void) {
-  //uint16_t init_sequence1[] = {0xc4, 0x00, 0};
-  uint16_t init_sequence2[] = {0xc4, 0x00, 4};
-  uint16_t init_sequence3[] = {0xc5, 0x8f, I2C_READ};
-  uint8_t status;
+  uint16_t init_sequence1[] = {0xc4, 0x04, 0x00}; //configuration
+  uint16_t init_sequence2[] = {0xc4, 0x00, 0x04}; //takes aquisition & correlation with DC correction
+  uint16_t dist_query[] = {0xc5, 0x0f, I2C_READ}; //reads 1 byte from 0x0f
+  uint16_t dist_query1[] = {0xc5, 0x10, I2C_READ}; //reads 1 byte from 0x10
+  uint8_t distanceArray[];
   int i2c_handle;
   int result;
+  int result1;
 
   i2c_handle = i2c_open(1);
 
-  //printf("Opened bus, result=%d\n", i2c_handle);
+  printf("Opened bus, result=%d\n", i2c_handle);
   //result = i2c_send_sequence(i2c_handle, init_sequence1, 3, 0);
-  printf("Sequence processed, result=%d\n", result);
+  //printf("Sequence processed, result=%d\n", result);
   result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
   printf("Sequence processed, result=%d\n", result);
-  result = i2c_send_sequence(i2c_handle, init_sequence3, 3, &status);
+  result = i2c_send_sequence(i2c_handle, dist_query, 4, &distanceArray[0]);
+  result1 = i2c_send_sequence(i2c_handle, dist_query1, 4, &distanceArray[1]);
   printf("Sequence processed, result=%d\n", result);
-  printf("Status=%d\n", (int)(status));
+  printf("Sequence processed, result=%d\n", result1);
+
+  int distance = (distanceArray[0] + distanceArray[1])
+  printf("Status=%d\n", (int)(distance));
 
   i2c_close(i2c_handle);
 
