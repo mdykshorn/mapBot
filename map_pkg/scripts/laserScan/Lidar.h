@@ -1,5 +1,11 @@
 //Lidar class
-#include <lsquaredc.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include "lsquaredc.h"
 
 #ifndef _LIDARLite_H_
 #define _LIDARLite_H_
@@ -8,15 +14,15 @@ class Lidar
 {
   public:
       Lidar();
-      void begin(int = 0, bool = false, bool = false, char = 0x62);
-      void configure(int = 0, char = 0x62);
-      void fast(char = 0x62);
-      int distance(bool = true, bool = true, char = 0x62);
-      int signalStrength(char = 0x62);
-      void write(char, char, char = 0x62);
-      void read(char, int, byte*, bool, char);
+      void begin(int = 0, bool = false);
+      void configure(int = 0);
+      int distance(bool = true, bool = true);
+      int signalStrength();
+      void write(char, char);
+      void read(char, int, byte*, bool);
   private:
-      static bool errorReporting;     
+      static bool errorReporting;
+	  int handle;
 };
 
 #endif

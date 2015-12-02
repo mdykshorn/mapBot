@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include "lsquaredc.h"
-#include <unistd.h>
+
 
 /*
   An example of how to use the lsquaredc library. The code below talks to a SFH7773 light/proximity sensor. It opens the
