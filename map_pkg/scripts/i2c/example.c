@@ -49,17 +49,22 @@ int main(void) {
 
   printf("Opened bus, result=%d\n", i2c_handle);
   result = i2c_send_sequence(i2c_handle, init_sequence1, 3, 0);
-  printf("Sequence processed, result=%d\n", result);
-  result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
-  printf("Sequence processed, result=%d\n", result);
-  result = i2c_send_sequence(i2c_handle, dist_query, 4, (uint8_t*)(&distance));
-  //result1 = i2c_send_sequence(i2c_handle, dist_query1, 4, &distanceArray[1]);
-  printf("Sequence processed, result=%d\n", result);
-  //printf("Sequence processed, result=%d\n", result1);
 
-  //int distance = (distanceArray[0]<<4) + distanceArray[1];
-  //distance = ((distance >> 8) & 0x00FF) | ((distance << 8) & 0xFF00);
-  printf("Distance=%d\n", (int)(distance));
+  for (int i = 0; i++; i<50)
+  {
+    printf("Sequence processed, result=%d\n", result);
+    result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
+    printf("Sequence processed, result=%d\n", result);
+    delay(500);
+    result = i2c_send_sequence(i2c_handle, dist_query, 4, (uint8_t*)(&distance));
+    //result1 = i2c_send_sequence(i2c_handle, dist_query1, 4, &distanceArray[1]);
+    printf("Sequence processed, result=%d\n", result);
+    //printf("Sequence processed, result=%d\n", result1);
+
+    //int distance = (distanceArray[0]<<4) + distanceArray[1];
+    //distance = ((distance >> 8) & 0x00FF) | ((distance << 8) & 0xFF00);
+    printf("Distance=%d\n", (int)(distance));
+  }
 
   i2c_close(i2c_handle);
 
