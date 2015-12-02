@@ -38,12 +38,12 @@
 int main(void) {
   uint16_t init_sequence1[] = {0xc4, 0x04, 0x00}; //configuration
   uint16_t init_sequence2[] = {0xc4, 0x00, 0x04}; //takes aquisition & correlation with DC correction
-  uint16_t dist_query[] = {0xc5, 0x0f, I2C_READ}; //reads 1 byte from 0x0f
-  uint16_t dist_query1[] = {0xc5, 0x10, I2C_READ}; //reads 1 byte from 0x10
-  uint8_t distanceArray[2];
+  uint16_t dist_query[] = {0xc5, 0x8f, I2C_READ, I2C_READ}; //reads 2 byte from 0x8f
+  //uint16_t dist_query1[] = {0xc5, 0x10, I2C_READ}; //reads 1 byte from 0x10
+  uint16_t distance;
   int i2c_handle;
   int result;
-  int result1;
+  //int result1;
 
   i2c_handle = i2c_open(1);
 
@@ -52,12 +52,13 @@ int main(void) {
   printf("Sequence processed, result=%d\n", result);
   result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
   printf("Sequence processed, result=%d\n", result);
-  result = i2c_send_sequence(i2c_handle, dist_query, 4, &distanceArray[0]);
-  result1 = i2c_send_sequence(i2c_handle, dist_query1, 4, &distanceArray[1]);
+  result = i2c_send_sequence(i2c_handle, dist_query, 4, &distance);
+  //result1 = i2c_send_sequence(i2c_handle, dist_query1, 4, &distanceArray[1]);
   printf("Sequence processed, result=%d\n", result);
-  printf("Sequence processed, result=%d\n", result1);
+  //printf("Sequence processed, result=%d\n", result1);
 
-  int distance = (distanceArray[0]<<4) + distanceArray[1];
+  //int distance = (distanceArray[0]<<4) + distanceArray[1];
+  distance = ((distance >> 8) & 0x00FF) | ((distance << 8) & 0xFF00);
   printf("Distance=%d\n", (int)(distance));
 
   i2c_close(i2c_handle);
