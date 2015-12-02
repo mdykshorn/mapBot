@@ -50,7 +50,7 @@ int main(void) {
   printf("Opened bus, result=%d\n", i2c_handle);
   result = i2c_send_sequence(i2c_handle, init_sequence1, 3, 0);
 
-  count = 0;
+  int count = 0;
   while (count<50)
   {
     printf("Sequence processed, result=%d\n", result);
