@@ -44,7 +44,7 @@ int main(void) {
   uint8_t distanceArray[2];
   int i2c_handle;
   int result;
-  //int result1;
+  int result1;
 
   i2c_handle = i2c_open(1);
 
