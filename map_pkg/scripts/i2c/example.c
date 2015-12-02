@@ -57,7 +57,7 @@ int main(void) {
   printf("Sequence processed, result=%d\n", result);
   printf("Sequence processed, result=%d\n", result1);
 
-  int distance = (distanceArray[0] + distanceArray[1]);
+  int distance = (distanceArray[0]<<4) + distanceArray[1]));
   printf("Distance=%d\n", (int)(distance));
 
   i2c_close(i2c_handle);
