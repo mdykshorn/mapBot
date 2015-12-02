@@ -5,7 +5,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "lsquaredc.h"
+
+//needed when mixing c and c++ libraries
+#ifdef __cplusplus
+    extern "C" {
+#endif
+        #include "lsquaredc.h"
+
+#ifdef __cplusplus
+    }
+#endif
+
 
 #ifndef _LIDARLite_H_
 #define _LIDARLite_H_

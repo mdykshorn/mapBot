@@ -5,7 +5,6 @@
 #include "SimpleGPIO.h"
 
 
-
 #ifndef _laserScan_H_
 #define _laserScan_H_
 

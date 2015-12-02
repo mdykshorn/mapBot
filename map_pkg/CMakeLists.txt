@@ -1,189 +1,58 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(map_pkg)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  rospy
-  sensor_msgs
-  std_msgs
-)
+find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs sensor_msgs)
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
-
-
-## Uncomment this if the package has a setup.py. This macro ensures
-## modules and global scripts declared therein get installed
-## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
-
-################################################
-## Declare ROS messages, services and actions ##
-################################################
-
-## To declare and build messages, services or actions from within this
-## package, follow these steps:
-## * Let MSG_DEP_SET be the set of packages whose message types you use in
-##   your messages/services/actions (e.g. std_msgs, actionlib_msgs, ...).
-## * In the file package.xml:
-##   * add a build_depend tag for "message_generation"
-##   * add a build_depend and a run_depend tag for each package in MSG_DEP_SET
-##   * If MSG_DEP_SET isn't empty the following dependency has been pulled in
-##     but can be declared for certainty nonetheless:
-##     * add a run_depend tag for "message_runtime"
-## * In this file (CMakeLists.txt):
-##   * add "message_generation" and every package in MSG_DEP_SET to
-##     find_package(catkin REQUIRED COMPONENTS ...)
-##   * add "message_runtime" and every package in MSG_DEP_SET to
-##     catkin_package(CATKIN_DEPENDS ...)
-##   * uncomment the add_*_files sections below as needed
-##     and list every .msg/.srv/.action file to be processed
-##   * uncomment the generate_messages entry below
-##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
-
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   JointState.msg
-# )
-
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
-
-## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
-#   Action1.action
-#   Action2.action
-# )
-
-## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   sensor_msgs#   std_msgs
-# )
-
-################################################
-## Declare ROS dynamic reconfigure parameters ##
-################################################
-
-## To declare and build dynamic reconfigure parameters within this
-## package, follow these steps:
-## * In the file package.xml:
-##   * add a build_depend and a run_depend tag for "dynamic_reconfigure"
-## * In this file (CMakeLists.txt):
-##   * add "dynamic_reconfigure" to
-##     find_package(catkin REQUIRED COMPONENTS ...)
-##   * uncomment the "generate_dynamic_reconfigure_options" section below
-##     and list every .cfg file to be processed
-
-## Generate dynamic reconfigure parameters in the 'cfg' folder
-# generate_dynamic_reconfigure_options(
-#   cfg/DynReconf1.cfg
-#   cfg/DynReconf2.cfg
-# )
-
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if you package contains header files
-## LIBRARIES: libraries you create in this project that dependent projects also need
-## CATKIN_DEPENDS: catkin_packages dependent projects also need
-## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-  LIBRARIES map_pkg
-  CATKIN_DEPENDS roscpp rospy sensor_msgs std_msgs
-  DEPENDS system_lib
+   INCLUDE_DIRS 
+#  LIBRARIES mpu9150
+#  CATKIN_DEPENDS roscpp rospy std_msgs
+#  DEPENDS system_lib
 )
 
-###########
-## Build ##
-###########
+## Alternatively we can use the CMakeLists.txt of the subdirs
+#add_subdirectory(src/linux-mpu9150)
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-# include_directories(include)
-#include_directories(
-#  ${CMAKE_CURRENT_SOURCE_DIR}/include
-#  ${catkin_INCLUDE_DIRS}
-#)
 
-## Declare a C++ library
-# add_library(general_khan
-#   src/${PROJECT_NAME}/general_khan.cpp
-# )
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+  scripts/laserScan
+  scripts/laserScan/BlackLib
+  scripts/laserScan/BlackLib/BlackADC
+  scripts/laserScan/GPIO
+  scripts/laserScan/i2c
+)
 
-## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
-## either from message generation or dynamic reconfigure
-# add_dependencies(general_khan ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#link_directories()
 
-## Declare a C++ executable
-# add_executable(general_khan_node src/general_khan_node.cpp)
 
-## Add cmake target dependencies of the executable
-## same as for the library above
-# add_dependencies(general_khan_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# The MPU9150 node
+# Adds flags to the compiler command line for sources in the current directory and below.
+add_definitions(-DEMPL_TARGET_LINUX -DMPU9150 -DAK8975_SECONDARY)
+add_executable(laserScan_node scripts/laserScan_node.cpp)
+add_library(laserScan SHARED scripts/laserScan/laserScan.cpp)
+add_library(Lidar SHARED scripts/laserScan/Lidar.cpp)
+add_library(BlackLib SHARED scripts/laserScan/BlackLib/BlackCore.cpp)
+add_library(BlackADC SHARED scripts/laserScan/BlackLib/BlackADC/BlackADC.cpp)
+add_library(i2c SHARED scripts/laserScan/i2c/lsquaredc.c)
+add_library(GPIO SHARED scripts/laserScan/GPIO/SimpleGPIO.cpp)
+target_link_libraries(laserScan_node laserScan Lidar BlackLib BlackADC i2c GPIO  ${catkin_LIBRARIES})
+#target_link_libraries(mpu9150_node ${catkin_LIBRARIES})
 
-## Specify libraries to link a library or executable target against
-# target_link_libraries(general_khan_node
-#   ${catkin_LIBRARIES}
-# )
+# imu utility
+#add_executable(imu src/linux-mpu9150/imu.c)
+#target_link_libraries(imu vector3d linux_glue mpu9150 inv_mpu  quaternion inv_mpu_dmp_motion_driver)
 
-#############
-## Install ##
-#############
+# imucal utility (calibration utility)
+#add_executable(imucal src/linux-mpu9150/imucal.c)
+#target_link_libraries(imucal linux_glue mpu9150 inv_mpu quaternion inv_mpu_dmp_motion_driver vector3d ${catkin_LIBRARIES})
 
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
+install(TARGETS laserScan_node laserScan Lidar BlackLib BlackADC i2c GPIO
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-install(PROGRAMS
-   scripts/laserScan_node.py
-   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
- )
+#install(FILES src/accelcal.txt src/magcal.txt DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-## Mark executables and/or libraries for installation
-# install(TARGETS general_khan general_khan_node
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
-
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
-
-#############
-## Testing ##
-#############
-
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_general_khan.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
-
-## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)
+install(DIRECTORY scripts/laserScan DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
