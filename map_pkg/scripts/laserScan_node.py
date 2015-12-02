@@ -207,7 +207,7 @@ class laserScan(object):
 if __name__ == '__main__':
 	try:
 		#initializes the node named scanner
-		rospy.init_node('irdistance', anonymous=True)
+		rospy.init_node('laserScan', anonymous=True)
 
 		pub = rospy.Publisher('/scan', LaserScan, queue_size=10)
 
