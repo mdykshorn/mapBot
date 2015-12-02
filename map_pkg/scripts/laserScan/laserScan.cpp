@@ -27,10 +27,10 @@ laserScan::laserScan()
 void laserScan::initialize_pins()
 {
 	//initilizes pins
-	gpio_omap_mux_setup("gpmc_ad7", "07"); 	//gpio 39 P8pin# 4
-	gpio_omap_mux_setup("gpmc_ad10", "07"); //gpio 26 P8pin#14
-	gpio_omap_mux_setup("gpmc_ad6", "07"); 	//gpio 38 P8pin# 3
-	gpio_omap_mux_setup("gpmc_ad2", "07"); 	//gpio 34 P8pin# 5
+	gpio_omap_mux_setup("mcasp0_fsr ", "07"); 	//gpio  P9pin# 27
+	gpio_omap_mux_setup("gpmc_ad15", "07"); //gpio 26 P8pin#15
+	gpio_omap_mux_setup("gpmc_ad13", "07"); 	//gpio 38 P8pin# 11
+	gpio_omap_mux_setup("gpmc_ad12", "07"); 	//gpio 34 P8pin# 12
 }
 
 //Needs confirmation of correct function use
