@@ -319,6 +319,15 @@ void Lidar::read(char myAddress, int numOfBytes, byte arrayToSave[2], bool monit
 	//}
 	//need to figure out how to implement this with the new library
     Wire.requestFrom((int)LidarI2cAddress, numOfBytes);
+	if (numOfBytes == 1)
+	{
+		uint16_t read1byte[] = {}
+	}
+	else
+	{
+		uint16_t read2byte[] = {}
+		
+	}
     int i = 0;
     if(numOfBytes <= Wire.available())
 	{
