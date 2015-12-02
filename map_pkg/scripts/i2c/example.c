@@ -40,7 +40,7 @@ int main(void) {
   uint16_t init_sequence2[] = {0xc4, 0x00, 0x04}; //takes aquisition & correlation with DC correction
   uint16_t dist_query[] = {0xc5, 0x0f, I2C_READ}; //reads 1 byte from 0x0f
   uint16_t dist_query1[] = {0xc5, 0x10, I2C_READ}; //reads 1 byte from 0x10
-  uint8_t distanceArray[];
+  uint8_t distanceArray[2];
   int i2c_handle;
   int result;
   int result1;
@@ -57,7 +57,7 @@ int main(void) {
   printf("Sequence processed, result=%d\n", result);
   printf("Sequence processed, result=%d\n", result1);
 
-  int distance = (distanceArray[0] + distanceArray[1])
+  int distance = (distanceArray[0] + distanceArray[1]);
   printf("Status=%d\n", (int)(distance));
 
   i2c_close(i2c_handle);
