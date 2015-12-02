@@ -39,6 +39,7 @@ bool Lidar::errorReporting = false;
 Lidar::Lidar()
 {
 	int Lidar::handle = 0;
+	bool Lidar::nack = false;
 }
 
 /* =============================================================================
@@ -185,7 +186,15 @@ int Lidar::distance(bool stablizePreampFlag, bool takeReference)
   read(0x8f,2,distanceArray,true);
   // Shift high byte and add to low byte
   int distance = (distanceArray[0] << 8) + distanceArray[1];
-  return(distance);
+  //if there is a failure in sensor communication aka "nack", return the maximum sensor distance
+  if (!Lidar::nack)
+  {
+	return(distance);
+  }
+  else
+  {
+	  return(4000);
+  }
 }
 
 /* =============================================================================
@@ -253,8 +262,8 @@ int Lidar::signalStrength()
 	uint16_t init_sequence1[] = {0xc4, (int)myAddress, (int)myValue};
     //sends sequence over i2c
     int nackCatcher = i2c_send_sequence(Lidar::handle, init_sequence1, 3, 0);
-	//write failed catcher figure out a way to implement 
-    //if(nackCatcher != 1){Serial.println("> nack");}
+	//write failed catcher
+    if(nackCatcher != 1){Lidar::nack = true;}
 	//might need to find another way to implement delay
     delay(1);
   }
@@ -276,7 +285,7 @@ void Lidar::read(char myAddress, int numOfBytes, byte arrayToSave[2], bool monit
 
     int nackCatcher = i2c_send_sequence(Lidar::handle, busy_sequence, 5, &busyCheck);
 	//checks for nack
-    //if(nackCatcher != 1){}
+    if(nackCatcher != 1){Lidar::nack = true;}
 
 	//ands busyCheck with 00000001 to only use the last bit
 	busyFlag = 0x01 & busyCheck;
@@ -290,21 +299,25 @@ void Lidar::read(char myAddress, int numOfBytes, byte arrayToSave[2], bool monit
   //runs when not busy
   if(busyFlag == 0)
   {
-	uint16_t read_sequence1[] = {0xc4, 0x8f, I2C_RESTART, 0xc5, I2C_READ};
-	uint16_t read_sequence2[] = {0xc4, 0x8f, I2C_RESTART, 0xc5, I2C_READ, I2C_READ};
+	uint16_t read_sequence1[] = {0xc4, (int)myAddress, I2C_RESTART, 0xc5, I2C_READ};
+	uint16_t read_sequence2[] = {0xc4, 0x0f, I2C_RESTART, 0xc5, I2C_READ, I2C_READ};
+	uint16_t twoBytesSave;
 
 	//reads either 1 or 2 bytes and saves to arrayToSave(need to fix 2 byte arrayToSave)
 	if (numOfBytes == 1)
 	{
 	    int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence1, 5, &arrayToSave[0]);
 		//detects failed write
-		//if(nackCatcher != 1){}
+		if(nackCatcher != 1){Lidar::nack = true;}
 	}
 	else
 	{
-	    int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence2, 6, *arrayToSave);
+	    int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence2, 6, &twoBytesSave);
 		//detects failed write
-		//if(nackCatcher != 1){}
+		if(nackCatcher != 1){Lidar::nack = true;}
+		//separates the 2 Bytes
+		arrayToSave[0] = twoBytesSave & 0xFF;
+		arrayToSave[1] = twoBytesSave >> 8;
 	}
   }
   //if busy for a long time bails

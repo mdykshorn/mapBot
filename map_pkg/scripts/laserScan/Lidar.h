@@ -23,6 +23,7 @@ class Lidar
   private:
       static bool errorReporting;
 	  int handle;
+	  bool nack;
 };
 
 #endif
