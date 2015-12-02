@@ -50,7 +50,8 @@ int main(void) {
   printf("Opened bus, result=%d\n", i2c_handle);
   result = i2c_send_sequence(i2c_handle, init_sequence1, 3, 0);
 
-  for (int i = 0; i++; i<50)
+  count = 0
+  while (count<50)
   {
     printf("Sequence processed, result=%d\n", result);
     result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
@@ -64,6 +65,7 @@ int main(void) {
     //int distance = (distanceArray[0]<<4) + distanceArray[1];
     //distance = ((distance >> 8) & 0x00FF) | ((distance << 8) & 0xFF00);
     printf("Distance=%d\n", (int)(distance));
+    count++;
   }
 
   i2c_close(i2c_handle);
