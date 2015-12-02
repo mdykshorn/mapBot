@@ -48,8 +48,8 @@ int main(void) {
   i2c_handle = i2c_open(1);
 
   printf("Opened bus, result=%d\n", i2c_handle);
-  //result = i2c_send_sequence(i2c_handle, init_sequence1, 3, 0);
-  //printf("Sequence processed, result=%d\n", result);
+  result = i2c_send_sequence(i2c_handle, init_sequence1, 3, 0);
+  printf("Sequence processed, result=%d\n", result);
   result = i2c_send_sequence(i2c_handle, init_sequence2, 3, 0);
   printf("Sequence processed, result=%d\n", result);
   result = i2c_send_sequence(i2c_handle, dist_query, 4, &distanceArray[0]);
@@ -58,7 +58,7 @@ int main(void) {
   printf("Sequence processed, result=%d\n", result1);
 
   int distance = (distanceArray[0] + distanceArray[1]);
-  printf("Status=%d\n", (int)(distance));
+  printf("Distance=%d\n", (int)(distance));
 
   i2c_close(i2c_handle);
 
