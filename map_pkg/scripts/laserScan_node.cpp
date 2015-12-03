@@ -18,7 +18,7 @@
 #include "ros/ros.h"
 #include "std_msgs/Header.h"
 #include "sensor_msgs/LaserScan.h"
-#inlcude "laserScan.h"
+#include "laserScan.h"
 
 
 int main()
