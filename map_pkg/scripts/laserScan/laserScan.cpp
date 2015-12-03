@@ -1,18 +1,19 @@
 //laserScan class
 #include <Lidar.h>
+#include <iostream>
+#include <string>
 #include "BlackADC.h"
 #include "SimpleGPIO.h"
 #include "laserScan.h"
 #include <unistd.h>
 
-
 //default constructor
 laserScan::laserScan()
 {
-	float angle = 0.0;
-	float threshold = 570;
-	float distance = 0.0;
-	int lastval = 600;
+	angle = 0.0;
+	threshold = 570;
+	distance = 0.0;
+	lastval = 600;
 	//float ranges[400] = {};
 }
 //need to figure out pin values
@@ -37,7 +38,7 @@ void laserScan::set_all_pins_low()
 
 //steps pins
 //Needs confirmation of correct function use
-void fullstep(int pin_index)
+void laserScan::fullstep(int pin_index)
 {
 	int pins[] = {27, 11, 15, 12};
 	gpio_set_value(pins[pin_index], HIGH);

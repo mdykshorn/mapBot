@@ -1,6 +1,8 @@
 //laserScan Class Morgan Dykshorn
 #include <Lidar.h>
 #include <unistd.h>
+#include <iostream>
+#include <string>
 #include "BlackADC.h"
 #include "SimpleGPIO.h"
 
