@@ -28,7 +28,7 @@
 #include <getopt.h>
 #include <errno.h>
 
-int main()
+int main(int argc, char **argv)
 {
   //initializes node
   ros::init(argc, argv, "laserScan");
