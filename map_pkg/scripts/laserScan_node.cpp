@@ -21,7 +21,7 @@
 #include "laserScan.h"
 #include "Lidar.h"
 #include "SimpleGPIO.h"
-#include "BlackADC.h"
+#include "BlackADC/BlackADC.h"
 
 #include <stdio.h>
 #include <stdint.h>
