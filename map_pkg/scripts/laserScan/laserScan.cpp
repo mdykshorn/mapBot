@@ -13,7 +13,7 @@ laserScan::laserScan()
 	float threshold = 570;
 	float distance = 0.0;
 	int lastval = 600;
-	float ranges[400] = {};
+	//float ranges[400] = {};
 }
 //need to figure out pin values
 void laserScan::initialize_pins()
@@ -45,6 +45,8 @@ void fullstep(int pin_index)
 	gpio_set_value(pins[(pin_index+1) % 4], LOW);
 	gpio_set_value(pins[(pin_index+2) % 4], LOW);
 }
+
+float ranges[400] = {};
 
 //public functions
 void laserScan::calibrate(Lidar& lidar /*BlackLib::BlackADC& analog(BlackLib::AIN0)*/)
@@ -116,6 +118,7 @@ void laserScan::scan(Lidar& lidar /*BlackLib::BlackADC& analog(BlackLib::AIN0)*/
 }
 //gets range array
 //not sure if most efficient way to accomplish this
+/*
 void laserScan::getRanges(float (&ranges)[400])
 {
 	for(int i; i++; i<400)
@@ -123,3 +126,4 @@ void laserScan::getRanges(float (&ranges)[400])
 		ranges[i] = laserScan::ranges[i];
 	}
 }
+*/

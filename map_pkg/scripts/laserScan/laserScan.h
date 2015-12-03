@@ -17,7 +17,8 @@ class laserScan
 		void calibrate(Lidar& lidar /*BlackLib::BlackADC& analog(BlackLib::AIN0)*/);
 		void scan(Lidar& lidar /*BlackLib::BlackADC& analog(BlackLib::AIN0)*/);
 
-		void getRanges(float (&ranges)[400]);
+		//void getRanges(float (&ranges)[400]);
+		float ranges[];
 		
 	private:
 		
@@ -25,7 +26,7 @@ class laserScan
 		float threshold;
 		float distance;
 		int lastval;
-		float ranges[];
+		//float ranges[];
 		
 		void initialize_pins();
 		void set_all_pins_low();

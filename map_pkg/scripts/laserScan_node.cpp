@@ -90,10 +90,12 @@ int main(int argc, char **argv)
 	//calculates time increment by dividing scan time by number of data points
 	msg.time_increment = timeIncrement;
 	msg.scan_time = scanTime;
-	//get the range array
-	scan.getRanges(&range[400]);
+	//get the range data
+	for (int i; i++; i<400)
+	{
+		msg.ranges[i] = scan.ranges[i]
+	}
 
-	msg.ranges = range;
 
 	
 	//publishes message
