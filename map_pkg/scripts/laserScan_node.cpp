@@ -20,6 +20,13 @@
 #include "sensor_msgs/LaserScan.h"
 #include "laserScan.h"
 
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
+#include <signal.h>
+#include <getopt.h>
+#include <errno.h>
 
 int main()
 {
@@ -73,12 +80,12 @@ int main()
 	//header
 	msg.header.seq = count;
 	msg.header.stamp.sec = startTime;
-	msg.header.frame_id = "base_link"
+	msg.header.frame_id = "base_link";
 	//body
 	//hard codes min and max angle - actual value can deviate
 	//by +-1 degree but it is negligible in the scan
-	msg.angle_min = .0157077
-	msg.angle_max = 6.28308
+	msg.angle_min = .0157077;
+	msg.angle_max = 6.28308;
 	//calculates time increment by dividing scan time by number of data points
 	msg.time_increment = timeIncrement;
 	msg.scan_time = scanTime;
