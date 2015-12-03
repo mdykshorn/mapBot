@@ -93,7 +93,7 @@ int main(int argc, char **argv)
 	//get the range data
 	for (int i; i++; i<400)
 	{
-		msg.ranges[i] = scan.ranges[i]
+		msg.ranges[i] = scan.ranges[i];
 	}
 
 
