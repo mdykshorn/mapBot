@@ -46,26 +46,42 @@ int main()
   msg.angle_increment = 0.015708;
   msg.range_min = 0;
   msg.range_max = 40;
+  
+  //initilizes necesary variables
+  float startTime = 0.0;
+  float endTime = 0.0;
+  float scanTime = 0.0;
+  float timeIncrement = 0.0;
 	
 	
   //a loop count to keep track of how many scans we have run
   int count = 0;
   while (ros::ok())
   {
-
+	//records start time
+	startTime = ros::Time::now();
 	//runs scan
 	scan.scan();
+	//records end time
+	endTime = ros::Time::now();
 	
-	//get necesary message variables from laserScan
+	scanTime = endTime - startTime;
+	timeIncrement = scanTime/400;
+
+	
+	//get necessary message variables from laserScan
 	//header
 	msg.header.seq = count;
-	msg.header.stamp.sec = scan.getStart_time;
+	msg.header.stamp.sec = startTime;
 	msg.header.frame_id = "base_link"
 	//body
-	msg.angle_min = scan.getAngle_min;
-	msg.angle_max = scan.getAngle_max;
-	msg.time_increment = scan.getTime_increment;
-	msg.scan_time = scan.getScan_time;
+	//hard codes min and max angle - actual value can deviate
+	//by +-1 degree but it is negligible in the scan
+	msg.angle_min = .0157077
+	msg.angle_max = 6.28308
+	//calculates time increment by dividing scan time by number of data points
+	msg.time_increment = timeIncrement;
+	msg.scan_time = scanTime;
 	//get the range array
 	scan.getRanges(&msg.ranges);
 

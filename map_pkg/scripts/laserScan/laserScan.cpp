@@ -14,20 +14,12 @@ laserScan::laserScan()
 	float threshold = 570;
 	float distance = 0.0;
 	int lastval = 600;
-	float startTime = 0.0;
-	float finishTime = 0.0;
-	float datatime1 = 0.0;
-	float datatime2 = 0.0;
-	float angle_min = 0.0;
-	float angle_max = 0.0;
-	float timeIncrement = 0.0;
-	float scanTime = 0.0;
 	float ranges[400] = {};
 }
 //need to figure out pin values
 void laserScan::initialize_pins()
 {
-	//initilizes pins
+	//initializes pins
 	gpio_omap_mux_setup("mcasp0_fsr ", "07"); 	//gpio  P9pin# 27
 	gpio_omap_mux_setup("gpmc_ad15", "07"); //gpio 26 P8pin#15
 	gpio_omap_mux_setup("gpmc_ad13", "07"); 	//gpio 38 P8pin# 11
@@ -60,9 +52,9 @@ void laserScan::calibrate(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN
 {
 	//sets angle to not be zero so loop will run
 	laserScan::angle = 1.0;
-	//initilizes rotateVal, the value from the IR sensor
+	//initializes rotateVal, the value from the IR sensor
 	int rotateVal = 0;
-	//initilizes the LIDARLite
+	//initializes the LIDARLite
 	lidar.begin(1);
 	
 	while (laserScan::angle!=0)
@@ -93,8 +85,6 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0))
 	int rotateVal = 0;
 	//sets angle slightly above 0 so loop will run
 	laserScan::angle = 0.001;
-	//records start time
-	//laserScan::startTime = ros::Time::now();
 	//runs while there are less than 400 data points or the angle is not 0
 	while(count<400 && laserScan::angle != 0)
 	{
@@ -124,42 +114,12 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0))
 		}
 	}
 	laserScan::set_all_pins_low();
-	//hardcodes min and max angle - actual value can deviate by +-1 degree but it is negligible in the scan
+	//hard codes min and max angle - actual value can deviate by +-1 degree but it is negligible in the scan
 	laserScan::angle_min = (.0157077);
 	laserScan::angle_max = (6.28308);
 	
-	//laserScan::finishTime = ros::Time::now();
-	
-	laserScan::scanTime = (laserScan::finishTime - laserScan::startTime);
-	//caluclates time between data points
-	laserScan::timeIncrement = laserScan::scanTime/count;
 }
-//getter functions for returning variables
-float laserScan::getAngle_min()
-{
-	return laserScan::angle_min;
-}
-
-float laserScan::getAngle_max()
-{
-	return laserScan::angle_max;
-}
-
-float laserScan::getTime_increment()
-{
-	return laserScan::timeIncrement;
-}
-
-float laserScan::getScan_time()
-{
-	return laserScan::scanTime;
-}
-
-float laserScan::getStart_time()
-{
-	return laserScan::startTime;
-}
-
+//gets range array
 //not sure if most efficient way to accomplish this
 void laserScan::getRanges(float &ranges[])
 {

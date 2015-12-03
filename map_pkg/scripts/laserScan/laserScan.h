@@ -17,11 +17,7 @@ class laserScan
 
 		void calibrate(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0));
 		void scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0);
-		float getAngle_min();
-		float getAngle_max();
-		float getTime_increment();
-		float getScan_time();
-		float getStart_time();
+
 		void getRanges(float &ranges[]);
 		
 		
@@ -31,15 +27,6 @@ class laserScan
 		float threshold;
 		float distance;
 		int lastval;
-		float startTime;
-		float finishTime;
-		float datatime1;
-		float datatime2;
-		float angleR[];
-		float angle_min;
-		float angle_max;
-		float timeIncrement;
-		float scanTime;
 		float ranges[];
 		
 		void initialize_pins();
