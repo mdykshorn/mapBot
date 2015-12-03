@@ -32,19 +32,17 @@ int main(int argc, char **argv)
 {
   //initializes node
   ros::init(argc, argv, "laserScan");
-
- 
   ros::NodeHandle n;
+  //creates publisher
+  ros::Publisher pub = n.advertise<sensor_msgs/LaserScan>("scan", 10);
+
 
   //creates am instance of the laserScan class
   laserScan::laserScan scan;
+  //creates object of the message types
+  std_msgs::Header header;
+  sensor_msgs::LaserScan msg;
   
-   //creates object of the message types
-   std_msgs::Header header;
-   sensor_msgs::LaserScan msg;
-  
-  //creates publisher
-  ros::Publisher pub = n.advertise<sensor_msgs/LaserScan>("scan", 10);
 
   //calibrates sensor
   scan.calibrate();
