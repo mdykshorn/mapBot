@@ -19,7 +19,6 @@ class laserScan
 
 		void getRanges(float &ranges[]);
 		
-		
 	private:
 		
 		float angle;
