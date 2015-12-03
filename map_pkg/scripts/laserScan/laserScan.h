@@ -17,7 +17,7 @@ class laserScan
 		void calibrate(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0));
 		void scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0));
 
-		void getRanges(float &ranges[]);
+		void getRanges(float (&ranges)[400]);
 		
 	private:
 		

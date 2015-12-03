@@ -116,10 +116,10 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0))
 }
 //gets range array
 //not sure if most efficient way to accomplish this
-void laserScan::getRanges(float &ranges[])
+void laserScan::getRanges(float (&ranges)[400])
 {
 	for(int i; i++; i<400)
 	{
-		ranges[i] = laserScan::ranges[i]
+		ranges[i] = laserScan::ranges[i];
 	}
 }
