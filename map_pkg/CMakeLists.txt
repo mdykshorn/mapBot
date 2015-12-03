@@ -38,7 +38,7 @@ add_library(lsquaredc SHARED scripts/laserScan/i2c/lsquaredc.c)
 add_library(SimpleGPIO SHARED scripts/laserScan/GPIO/SimpleGPIO.cpp)
 add_library(Lidar SHARED scripts/laserScan/Lidar.cpp)
 add_library(laserScan SHARED scripts/laserScan/laserScan.cpp)
-target_link_libraries(laserScan_node BlackLib BlackADC lsquaredc SimpleGPIO Lidar laserScan ${catkin_LIBRARIES})
+target_link_libraries(laserScan_node BlackCore BlackADC lsquaredc SimpleGPIO Lidar laserScan ${catkin_LIBRARIES})
 #target_link_libraries(mpu9150_node ${catkin_LIBRARIES})
 
 # imu utility
@@ -49,7 +49,7 @@ target_link_libraries(laserScan_node BlackLib BlackADC lsquaredc SimpleGPIO Lida
 #add_executable(imucal src/linux-mpu9150/imucal.c)
 #target_link_libraries(imucal linux_glue mpu9150 inv_mpu quaternion inv_mpu_dmp_motion_driver vector3d ${catkin_LIBRARIES})
 
-install(TARGETS laserScan_node BlackLib BlackADC lsquaredc SimpleGPIO Lidar laserScan
+install(TARGETS laserScan_node BlackCore BlackADC lsquaredc SimpleGPIO Lidar laserScan
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
