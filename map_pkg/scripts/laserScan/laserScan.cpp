@@ -1,6 +1,5 @@
 //laserScan class
 #include <Lidar.h>
-#include "ros/ros.h"
 #include "BlackADC.h"
 #include "SimpleGPIO.h"
 #include "laserScan.h"
