@@ -316,8 +316,10 @@ void Lidar::read(char myAddress, int numOfBytes, uint8_t arrayToSave[2], bool mo
 		//two separate reads of registers
 		//read low bit
 		int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence2, 5, &arrayToSave[0]);
-		//read high bit
-		int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence3, 5, &arrayToSave[1]);
+		//detects failed read
+    if(nackCatcher != 1){Lidar::nack = true;}
+    //read high bit
+		nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence3, 5, &arrayToSave[1]);
 		//detects failed read
 		if(nackCatcher != 1){Lidar::nack = true;}
 		/*
