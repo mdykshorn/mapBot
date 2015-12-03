@@ -31,7 +31,7 @@ include_directories(
 # Adds flags to the compiler command line for sources in the current directory and below.
 add_definitions(-DEMPL_TARGET_LINUX -DMPU9150 -DAK8975_SECONDARY)
 add_executable(laserScan_node scripts/laserScan_node.cpp)
-add_library(BlackLib SHARED scripts/laserScan/BlackLib/BlackLib.h)
+add_library(BlackLib SHARED scripts/laserScan/BlackLib/BlackCore.cpp)
 add_library(lsquaredc SHARED scripts/laserScan/i2c/lsquaredc.c)
 add_library(SimpleGPIO SHARED scripts/laserScan/GPIO/SimpleGPIO.cpp)
 add_library(Lidar SHARED scripts/laserScan/Lidar.cpp)
