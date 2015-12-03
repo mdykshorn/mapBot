@@ -300,8 +300,9 @@ void Lidar::read(char myAddress, int numOfBytes, uint8_t arrayToSave[2], bool mo
   if(busyFlag == 0)
   {
 	uint16_t read_sequence1[] = {0xc4, (int)myAddress, I2C_RESTART, 0xc5, I2C_READ};
-	uint16_t read_sequence2[] = {0xc4, 0x0f, I2C_RESTART, 0xc5, I2C_READ, I2C_READ};
-	int16_t twoBytesSave;
+	uint16_t read_sequence2[] = {0xc4, 0x0f, I2C_RESTART, 0xc5, I2C_READ};
+	uint16_t read_sequence3[] = {0xc4, 0x10, I2C_RESTART, 0xc5, I2C_READ};
+	//int16_t twoBytesSave;
 
 	//reads either 1 or 2 bytes and saves to arrayToSave(need to fix 2 byte arrayToSave)
 	if (numOfBytes == 1)
@@ -312,12 +313,22 @@ void Lidar::read(char myAddress, int numOfBytes, uint8_t arrayToSave[2], bool mo
 	}
 	else
 	{
+		//two separate reads of registers
+		//read low bit
+		int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence2, 5, &arrayToSave[0]);
+		//read high bit
+		int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence3, 5, &arrayToSave[1]);
+		//detects failed read
+		if(nackCatcher != 1){Lidar::nack = true;}
+		/*
+		Autoincrement read, requires a pointer to a buffer I don't know how to create
 	    int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence2, 6, (uint8_t)&twoBytesSave);
 		//detects failed write
 		if(nackCatcher != 1){Lidar::nack = true;}
 		//separates the 2 Bytes
 		arrayToSave[0] = twoBytesSave & 0xFF;
 		arrayToSave[1] = twoBytesSave >> 8;
+		*/
 	}
   }
   //if busy for a long time bails
