@@ -301,7 +301,7 @@ void Lidar::read(char myAddress, int numOfBytes, uint8_t arrayToSave[2], bool mo
   {
 	uint16_t read_sequence1[] = {0xc4, (int)myAddress, I2C_RESTART, 0xc5, I2C_READ};
 	uint16_t read_sequence2[] = {0xc4, 0x0f, I2C_RESTART, 0xc5, I2C_READ, I2C_READ};
-	uint16_t twoBytesSave;
+	int16_t twoBytesSave;
 
 	//reads either 1 or 2 bytes and saves to arrayToSave(need to fix 2 byte arrayToSave)
 	if (numOfBytes == 1)
