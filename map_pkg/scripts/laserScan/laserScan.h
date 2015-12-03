@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include "BlackADC/BlackADC.h"
-#include "SimpleGPIO.h"
+#include <SimpleGPIO.h>
 
 
 #ifndef _laserScan_H_

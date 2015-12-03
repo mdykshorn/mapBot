@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include "BlackADC/BlackADC.h"
-#include "SimpleGPIO.h"
+#include <SimpleGPIO.h>
 #include "laserScan.h"
 #include <unistd.h>
 
