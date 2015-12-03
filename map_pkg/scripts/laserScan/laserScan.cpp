@@ -91,7 +91,7 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0))
 		{
 			//steps motor
 			laserScan::fullstep(pin_index);
-			//waits
+			//waits 10 ms
 			usleep(10000);
 			//checks the ADC sensor
 			rotateVal = analog.getNumericValue();
@@ -113,10 +113,6 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0))
 		}
 	}
 	laserScan::set_all_pins_low();
-	//hard codes min and max angle - actual value can deviate by +-1 degree but it is negligible in the scan
-	laserScan::angle_min = (.0157077);
-	laserScan::angle_max = (6.28308);
-	
 }
 //gets range array
 //not sure if most efficient way to accomplish this

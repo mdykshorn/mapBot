@@ -23,7 +23,7 @@
 
 int main()
 {
-  //initilizes node
+  //initializes node
   ros::init(argc, argv, "laserScan");
 
  
@@ -47,7 +47,7 @@ int main()
   msg.range_min = 0;
   msg.range_max = 40;
   
-  //initilizes necesary variables
+  //initializes necessary variables
   float startTime = 0.0;
   float endTime = 0.0;
   float scanTime = 0.0;
