@@ -20,7 +20,6 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   scripts/laserScan
   scripts/laserScan/BlackLib
-  scripts/laserScan/BlackLib/BlackADC
   scripts/laserScan/GPIO
   scripts/laserScan/i2c
 )
