@@ -18,10 +18,9 @@
 #include "ros/ros.h"
 #include "std_msgs/Header.h"
 #include "sensor_msgs/LaserScan.h"
-#include "laserScan.h"
-#include "Lidar.h"
-#include "SimpleGPIO.h"
-#include "BlackADC/BlackADC.h"
+#include <laserScan.h>
+#include <Lidar.h>
+#include <BlackADC/BlackADC.h>
 
 #include <stdio.h>
 #include <stdint.h>
