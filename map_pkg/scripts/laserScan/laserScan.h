@@ -14,8 +14,8 @@ class laserScan
 	public:
 		laserScan();
 
-		void calibrate(Lidar& lidar, BlackADC& analog(AIN0));
-		void scan(Lidar& lidar, BlackADC& analog(AIN0));
+		void calibrate(Lidar& , BlackADC& );
+		void scan(Lidar& , BlackADC& );
 
 		//void getRanges(float (&ranges)[400]);
 		float ranges[];
