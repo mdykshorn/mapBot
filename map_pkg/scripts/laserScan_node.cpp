@@ -19,6 +19,7 @@
 #include "std_msgs/Header.h"
 #include "sensor_msgs/LaserScan.h"
 #include "laserScan.h"
+#include "Lidar.h"
 
 #include <stdio.h>
 #include <stdint.h>
@@ -39,13 +40,14 @@ int main(int argc, char **argv)
 
   //creates am instance of the laserScan class
   laserScan scan;
+  Lidar lidar;
   //creates object of the message types
   std_msgs::Header header;
   sensor_msgs::LaserScan msg;
   
 
   //calibrates sensor
-  scan.calibrate();
+  scan.calibrate(lidar);
 	
   //adds constant message parameters
   msg.angle_increment = 0.015708;
@@ -57,6 +59,7 @@ int main(int argc, char **argv)
   float endTime = 0.0;
   float scanTime = 0.0;
   float timeIncrement = 0.0;
+  float range[400]={};
 	
 	
   //a loop count to keep track of how many scans we have run
@@ -66,7 +69,7 @@ int main(int argc, char **argv)
 	//records start time
 	startTime = ros::Time::now().toSec();
 	//runs scan
-	scan.scan();
+	scan.scan(lidar);
 	//records end time
 	endTime = ros::Time::now().toSec();
 	
@@ -88,7 +91,9 @@ int main(int argc, char **argv)
 	msg.time_increment = timeIncrement;
 	msg.scan_time = scanTime;
 	//get the range array
-	scan.getRanges(&msg.ranges);
+	scan.getRanges(&range[400]);
+
+	msg.ranges = range;
 
 	
 	//publishes message
