@@ -1,5 +1,6 @@
 //laserScan Class Morgan Dykshorn
 #include <Lidar.h>
+#include <unistd.h>
 #include "ros/ros.h"
 #include "BlackADC.h"
 #include "SimpleGPIO.h"
@@ -21,7 +22,7 @@ class laserScan
 		float getTime_increment();
 		float getScan_time();
 		float getStart_time();
-		void getRanges(&ranges[]);
+		void getRanges(float &ranges[]);
 		
 		
 	private:

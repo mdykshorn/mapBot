@@ -4,24 +4,25 @@
 #include "BlackADC.h"
 #include "SimpleGPIO.h"
 #include "laserScan.h"
+#include <unistd.h>
 
 
 //default constructor
 laserScan::laserScan()
 {
-	float laserScan::angle = 0.0;
-	float laserScan::threshold = 570;
-	float laserScan::distance = 0.0;
-	int laserScan::lastval = 600;
-	float laserScan::startTime = 0.0;
-	float laserScan::finishTime = 0.0;
-	float laserScan::datatime1 = 0.0;
-	float laserScan::datatime2 = 0.0;
-	float laserScan::angle_min = 0.0;
-	float laserScan::angle_max = 0.0;
-	float laserScan::timeIncrement = 0.0;
-	float laserScan::scanTime = 0.0;
-	float laserScan::ranges[400] = {};
+	float angle = 0.0;
+	float threshold = 570;
+	float distance = 0.0;
+	int lastval = 600;
+	float startTime = 0.0;
+	float finishTime = 0.0;
+	float datatime1 = 0.0;
+	float datatime2 = 0.0;
+	float angle_min = 0.0;
+	float angle_max = 0.0;
+	float timeIncrement = 0.0;
+	float scanTime = 0.0;
+	float ranges[400] = {};
 }
 //need to figure out pin values
 void laserScan::initialize_pins()
@@ -47,7 +48,7 @@ void laserScan::set_all_pins_low()
 //Needs confirmation of correct function use
 void fullstep(int pin_index)
 {
-	int pins[] = {27, 11, 15, 12}
+	int pins[] = {27, 11, 15, 12};
 	gpio_set_value(pins[pin_index], HIGH);
 	gpio_set_value(pins[(pin_index+3) % 4], HIGH);
 	gpio_set_value(pins[(pin_index+1) % 4], LOW);
@@ -71,7 +72,7 @@ void laserScan::calibrate(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN
 			//steps motor
 			laserScan::fullstep(pin_index);
 			//waits
-			delay(2.5);
+			usleep(2500);
 	
 			//checks the ADC sensor
 			rotateVal = analog.getNumericValue();
@@ -85,8 +86,7 @@ void laserScan::calibrate(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN
 	laserScan::set_all_pins_low();
 }	
 
-//function needs to pass in ros time
-void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0), )
+void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0))
 {
 	//initializes count
 	int count = 0;
@@ -94,7 +94,7 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0), )
 	//sets angle slightly above 0 so loop will run
 	laserScan::angle = 0.001;
 	//records start time
-	laserScan::startTime = ros::Time::now();
+	//laserScan::startTime = ros::Time::now();
 	//runs while there are less than 400 data points or the angle is not 0
 	while(count<400 && laserScan::angle != 0)
 	{
@@ -103,7 +103,7 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0), )
 			//steps motor
 			laserScan::fullstep(pin_index);
 			//waits
-			delay(10);
+			usleep(10000);
 			//checks the ADC sensor
 			rotateVal = analog.getNumericValue();
 			if (laserScan::lastval < laserScan::threshold && rotateVal > laserScan::threshold)
@@ -128,7 +128,7 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog(BlackLib::AIN0), )
 	laserScan::angle_min = (.0157077);
 	laserScan::angle_max = (6.28308);
 	
-	laserScan::finishTime = ros::Time::now();
+	//laserScan::finishTime = ros::Time::now();
 	
 	laserScan::scanTime = (laserScan::finishTime - laserScan::startTime);
 	//caluclates time between data points
@@ -161,7 +161,7 @@ float laserScan::getStart_time()
 }
 
 //not sure if most efficient way to accomplish this
-void laserScan::getRanges(&ranges[])
+void laserScan::getRanges(float &ranges[])
 {
 	for(int i; i++; i<400)
 	{
