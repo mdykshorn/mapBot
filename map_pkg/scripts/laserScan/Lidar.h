@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <unistd.h>
 
 //needed when mixing c and c++ libraries
 #ifdef __cplusplus
