@@ -47,7 +47,7 @@ void fullstep(int pin_index)
 }
 
 //public functions
-void laserScan::calibrate(Lidar& lidar, /*BlackLib::BlackADC& analog(BlackLib::AIN0)*/)
+void laserScan::calibrate(Lidar& lidar /*BlackLib::BlackADC& analog(BlackLib::AIN0)*/)
 {
 	//sets angle to not be zero so loop will run
 	laserScan::angle = 1.0;
@@ -77,7 +77,7 @@ void laserScan::calibrate(Lidar& lidar, /*BlackLib::BlackADC& analog(BlackLib::A
 	laserScan::set_all_pins_low();
 }	
 
-void laserScan::scan(Lidar& lidar, /*BlackLib::BlackADC& analog(BlackLib::AIN0)*/)
+void laserScan::scan(Lidar& lidar /*BlackLib::BlackADC& analog(BlackLib::AIN0)*/)
 {
 	//initializes count
 	int count = 0;
