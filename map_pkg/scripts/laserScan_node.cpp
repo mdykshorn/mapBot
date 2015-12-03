@@ -20,6 +20,8 @@
 #include "sensor_msgs/LaserScan.h"
 #include "laserScan.h"
 #include "Lidar.h"
+#include "SimpleGPIO.h"
+#include "BlackADC.h"
 
 #include <stdio.h>
 #include <stdint.h>
@@ -28,6 +30,16 @@
 #include <signal.h>
 #include <getopt.h>
 #include <errno.h>
+
+//needed when mixing c and c++ libraries
+#ifdef __cplusplus
+    extern "C" {
+#endif
+        #include "lsquaredc.h"
+
+#ifdef __cplusplus
+    }
+#endif
 
 int main(int argc, char **argv)
 {
