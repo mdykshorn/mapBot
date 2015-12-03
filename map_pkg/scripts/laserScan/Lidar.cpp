@@ -37,8 +37,8 @@ bool Lidar::errorReporting = false;
 
 Lidar::Lidar()
 {
-	int Lidar::handle = 0;
-	bool Lidar::nack = false;
+	int handle = 0;
+	bool nack = false;
 }
 
 /* =============================================================================
@@ -180,7 +180,7 @@ int Lidar::distance(bool stablizePreampFlag, bool takeReference)
     write(0x00,0x03);
   }
   // Array to store high and low bytes of distance
-  byte distanceArray[2];
+  uint8_t distanceArray[2];
   // Read two bytes from register 0x8f. (See autoincrement note above)
   read(0x8f,2,distanceArray,true);
   // Shift high byte and add to low byte
@@ -247,7 +247,7 @@ int Lidar::distance(bool stablizePreampFlag, bool takeReference)
 int Lidar::signalStrength()
 {
   //  Array to store read value
-  byte signalStrengthArray[1];
+  uint8_t signalStrengthArray[1];
   //  Read one byte from 0x0e
   read(0x0e, 1, signalStrengthArray, false);
   return((int)((unsigned char)signalStrengthArray[0]));
@@ -263,13 +263,13 @@ int Lidar::signalStrength()
     int nackCatcher = i2c_send_sequence(Lidar::handle, init_sequence1, 3, 0);
 	//write failed catcher
     if(nackCatcher != 1){Lidar::nack = true;}
-	//might need to find another way to implement delay
-    delay(1);
+	//sleeps for 1 ms
+    usleep(1000);
   }
 
 /* =============================================================================
   =========================================================================== */
-void Lidar::read(char myAddress, int numOfBytes, byte arrayToSave[2], bool monitorBusyFlag){
+void Lidar::read(char myAddress, int numOfBytes, uint8_t arrayToSave[2], bool monitorBusyFlag){
   int busyFlag = 0;
   if(monitorBusyFlag)
   {
@@ -311,7 +311,7 @@ void Lidar::read(char myAddress, int numOfBytes, byte arrayToSave[2], bool monit
 	}
 	else
 	{
-	    int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence2, 6, &twoBytesSave);
+	    int nackCatcher = i2c_send_sequence(Lidar::handle, read_sequence2, 6, (uint8_t)&twoBytesSave);
 		//detects failed write
 		if(nackCatcher != 1){Lidar::nack = true;}
 		//separates the 2 Bytes

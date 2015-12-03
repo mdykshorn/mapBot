@@ -29,7 +29,7 @@ class Lidar
       int distance(bool = true, bool = true);
       int signalStrength();
       void write(char, char);
-      void read(char, int, byte*, bool);
+      void read(char, int, uint8_t*, bool);
   private:
       static bool errorReporting;
 	  int handle;
