@@ -2,9 +2,9 @@
 #include <Lidar.h>
 #include <iostream>
 #include <string>
-#include <BlackADC.h>
-#include <SimpleGPIO.h>
 #include "../BlackADC/BlackADC.h"
+#include <SimpleGPIO.h>
+#include "laserScan.h"
 #include <unistd.h>
 
 //default constructor
