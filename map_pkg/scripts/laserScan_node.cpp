@@ -20,7 +20,7 @@
 #include "sensor_msgs/LaserScan.h"
 #include <laserScan.h>
 #include <Lidar.h>
-#include "../BlackADC/BlackADC.h"
+#include "BlackLib/BlackADC/BlackADC.h"
 
 #include <stdio.h>
 #include <stdint.h>

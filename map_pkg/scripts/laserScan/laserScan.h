@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
-#include "../BlackADC/BlackADC.h"
+#include "BlackLib/BlackADC/BlackADC.h"
 #include <SimpleGPIO.h>
 
 
