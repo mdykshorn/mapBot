@@ -4,7 +4,7 @@
 #include <string>
 #include <BlackADC.h>
 #include <SimpleGPIO.h>
-#include "laserScan.h"
+#include "../BlackADC/BlackADC.h"
 #include <unistd.h>
 
 //default constructor
