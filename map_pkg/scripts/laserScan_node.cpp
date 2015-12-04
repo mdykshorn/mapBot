@@ -48,7 +48,7 @@ int main(int argc, char **argv)
   //creates publisher
   ros::Publisher pub = n.advertise<sensor_msgs::LaserScan>("scan", 10);
 
-  adcPin = BlackLib::AIN0;
+  enum adcPin = BlackLib::AIN0;
   //creates am instance of the laserScan class
   laserScan scan;
   Lidar lidar;
