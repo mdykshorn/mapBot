@@ -52,7 +52,7 @@ int main(int argc, char **argv)
   //creates am instance of the laserScan class
   laserScan scan;
   Lidar lidar;
-  BlackLib::BlackADC analog(0);
+  BlackLib::BlackADC analog(BlackLib::AIN0);
 
   //creates object of the message types
   std_msgs::Header header;
