@@ -48,11 +48,11 @@ int main(int argc, char **argv)
   //creates publisher
   ros::Publisher pub = n.advertise<sensor_msgs::LaserScan>("scan", 10);
 
-  enum adcPin = BlackLib::AIN0;
+
   //creates am instance of the laserScan class
   laserScan scan;
   Lidar lidar;
-  BlackLib::BlackADC analog(adcPin);
+  BlackLib::BlackADC analog(0);
 
   //creates object of the message types
   std_msgs::Header header;
