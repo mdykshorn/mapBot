@@ -45,7 +45,7 @@ target_link_libraries(laserScan_node Lidar laserScan BlackLib SimpleGPIO lsquare
 #add_executable(imucal src/linux-mpu9150/imucal.c)
 #target_link_libraries(imucal linux_glue mpu9150 inv_mpu quaternion inv_mpu_dmp_motion_driver vector3d ${catkin_LIBRARIES})
 
-install(TARGETS laserScan_node laserScan Lidar lsquaredc SimpleGPIO
+install(TARGETS laserScan_node laserScan Lidar BlackLib lsquaredc SimpleGPIO
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
