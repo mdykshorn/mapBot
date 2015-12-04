@@ -18,10 +18,10 @@ catkin_package(
 
 include_directories(
   ${catkin_INCLUDE_DIRS}
-  include/laserScan
-  include/laserScan/BlackLib
-  include/laserScan/GPIO
-  include/laserScan/i2c
+  src/laserScan
+  src/laserScan/BlackLib
+  src/laserScan/GPIO
+  src/laserScan/i2c
 )
 
 #link_directories()
@@ -31,11 +31,11 @@ include_directories(
 # Adds flags to the compiler command line for sources in the current directory and below.
 add_definitions(-DEMPL_TARGET_LINUX -DMPU9150 -DAK8975_SECONDARY)
 add_executable(laserScan_node src/laserScan_node.cpp)
-add_library(laserScan SHARED include/laserScan/laserScan.cpp)
-add_library(Lidar SHARED include/laserScan/Lidar.cpp)
-add_library(BlackLib SHARED include/laserScan/BlackLib/BlackCore.cpp)
-add_library(lsquaredc SHARED include/laserScan/i2c/lsquaredc.c)
-add_library(SimpleGPIO SHARED include/laserScan/GPIO/SimpleGPIO.cpp)
+add_library(laserScan SHARED src/laserScan/laserScan.cpp)
+add_library(Lidar SHARED src/laserScan/Lidar.cpp)
+add_library(BlackLib SHARED src/laserScan/BlackLib/BlackCore.cpp)
+add_library(lsquaredc SHARED src/laserScan/i2c/lsquaredc.c)
+add_library(SimpleGPIO SHARED src/laserScan/GPIO/SimpleGPIO.cpp)
 target_link_libraries(laserScan_node laserScan Lidar BlackLib lsquaredc SimpleGPIO  ${catkin_LIBRARIES})
 #target_link_libraries(mpu9150_node ${catkin_LIBRARIES})
 
