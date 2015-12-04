@@ -24,7 +24,8 @@ include_directories(
 )
 
 #link_directories()
-
+//finds the BlackLib Library
+find_library(BlackLib)
 
 # The MPU9150 node
 # Adds flags to the compiler command line for sources in the current directory and below.
@@ -34,7 +35,7 @@ add_library(laserScan SHARED scripts/laserScan/laserScan.cpp)
 add_library(Lidar SHARED scripts/laserScan/Lidar.cpp)
 add_library(lsquaredc SHARED scripts/laserScan/i2c/lsquaredc.c)
 add_library(SimpleGPIO SHARED scripts/laserScan/GPIO/SimpleGPIO.cpp)
-target_link_libraries(laserScan_node laserScan Lidar lsquaredc SimpleGPIO ${catkin_LIBRARIES})
+target_link_libraries(laserScan_node Lidar laserScan BlackLib SimpleGPIO lsquaredc ${catkin_LIBRARIES})
 #target_link_libraries(mpu9150_node ${catkin_LIBRARIES})
 
 # imu utility

@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <string>
-//#include "BlackADC/BlackADC.h"
+#include <BlackADC.h>
 #include <SimpleGPIO.h>
 
 
@@ -16,8 +16,8 @@ class laserScan
 	public:
 		laserScan();
 
-		void calibrate(Lidar&  /*BlackLib::BlackADC&*/ );
-		void scan(Lidar&  /*BlackLib::BlackADC&*/ );
+		void calibrate(Lidar&,  BlackLib::BlackADC& );
+		void scan(Lidar&,  BlackLib::BlackADC& );
 
 		//void getRanges(float (&ranges)[400]);
 		float ranges[];
