@@ -20,7 +20,7 @@
 #include "sensor_msgs/LaserScan.h"
 #include <laserScan.h>
 #include <Lidar.h>
-#include "BlackLib/BlackADC/BlackADC.h"
+//#include "BlackLib/BlackADC/BlackADC.h"
 
 #include <stdio.h>
 #include <stdint.h>
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
   //creates am instance of the laserScan class
   laserScan scan;
   Lidar lidar;
-  BlackLib::BlackADC analog(BlackLib::AIN0);
+  //BlackLib::BlackADC analog(BlackLib::AIN0);
 
   //creates object of the message types
   std_msgs::Header header;
@@ -60,7 +60,7 @@ int main(int argc, char **argv)
   
 
   //calibrates sensor
-  scan.calibrate(lidar, analog);
+  scan.calibrate(lidar/*, analog*/);
 	
   //adds constant message parameters
   msg.angle_increment = 0.015708;
@@ -82,7 +82,7 @@ int main(int argc, char **argv)
 	//records start time
 	startTime = ros::Time::now().toSec();
 	//runs scan
-	scan.scan(lidar, analog);
+	scan.scan(lidar/*, analog*/);
 	//records end time
 	endTime = ros::Time::now().toSec();
 	
