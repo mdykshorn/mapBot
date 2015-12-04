@@ -34,7 +34,7 @@ add_library(laserScan SHARED scripts/laserScan/laserScan.cpp)
 add_library(Lidar SHARED scripts/laserScan/Lidar.cpp)
 add_library(lsquaredc SHARED scripts/laserScan/i2c/lsquaredc.c)
 add_library(SimpleGPIO SHARED scripts/laserScan/GPIO/SimpleGPIO.cpp)
-target_link_libraries(laserScan_node Lidar laserScan BlackLib SimpleGPIO lsquaredc ${catkin_LIBRARIES})
+target_link_libraries(laserScan_node Lidar laserScan SimpleGPIO lsquaredc ${catkin_LIBRARIES})
 #target_link_libraries(mpu9150_node ${catkin_LIBRARIES})
 
 # imu utility
