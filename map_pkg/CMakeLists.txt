@@ -19,7 +19,6 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
   scripts/laserScan
-  scripts/laserScan/BlackLib
   scripts/laserScan/GPIO
   scripts/laserScan/i2c
 )
@@ -31,12 +30,11 @@ include_directories(
 # Adds flags to the compiler command line for sources in the current directory and below.
 add_definitions(-DEMPL_TARGET_LINUX -DMPU9150 -DAK8975_SECONDARY)
 add_executable(laserScan_node scripts/laserScan_node.cpp)
-add_library(BlackLib SHARED scripts/laserScan/BlackLib/BlackCore.cpp)
+add_library(laserScan SHARED scripts/laserScan/laserScan.cpp)
+add_library(Lidar SHARED scripts/laserScan/Lidar.cpp)
 add_library(lsquaredc SHARED scripts/laserScan/i2c/lsquaredc.c)
 add_library(SimpleGPIO SHARED scripts/laserScan/GPIO/SimpleGPIO.cpp)
-add_library(Lidar SHARED scripts/laserScan/Lidar.cpp)
-add_library(laserScan SHARED scripts/laserScan/laserScan.cpp)
-target_link_libraries(laserScan_node BlackLib lsquaredc SimpleGPIO Lidar laserScan ${catkin_LIBRARIES})
+target_link_libraries(laserScan_node laserScan Lidar lsquaredc SimpleGPIO ${catkin_LIBRARIES})
 #target_link_libraries(mpu9150_node ${catkin_LIBRARIES})
 
 # imu utility
@@ -47,7 +45,7 @@ target_link_libraries(laserScan_node BlackLib lsquaredc SimpleGPIO Lidar laserSc
 #add_executable(imucal src/linux-mpu9150/imucal.c)
 #target_link_libraries(imucal linux_glue mpu9150 inv_mpu quaternion inv_mpu_dmp_motion_driver vector3d ${catkin_LIBRARIES})
 
-install(TARGETS laserScan_node BlackLib lsquaredc SimpleGPIO Lidar laserScan
+install(TARGETS laserScan_node laserScan Lidar lsquaredc SimpleGPIO
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 

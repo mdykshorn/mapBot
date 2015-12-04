@@ -2,7 +2,7 @@
 #include <Lidar.h>
 #include <iostream>
 #include <string>
-#include "BlackADC/BlackADC.h"
+//#include "BlackADC/BlackADC.h"
 #include <SimpleGPIO.h>
 #include "laserScan.h"
 #include <unistd.h>
@@ -50,7 +50,7 @@ void laserScan::fullstep(int pin_index)
 float ranges[400] = {};
 
 //public functions
-void laserScan::calibrate(Lidar& lidar, BlackLib::BlackADC& analog)
+void laserScan::calibrate(Lidar& lidar/*, BlackLib::BlackADC& analog*/)
 {
 	//sets angle to not be zero so loop will run
 	laserScan::angle = 1.0;
@@ -69,7 +69,7 @@ void laserScan::calibrate(Lidar& lidar, BlackLib::BlackADC& analog)
 			usleep(2500);
 	
 			//checks the ADC sensor
-			rotateVal = analog.getNumericValue();
+			//rotateVal = analog.getNumericValue();
 			if (laserScan::lastval < laserScan::threshold && rotateVal > laserScan::threshold)
 			{
 				laserScan::angle = 0;
@@ -80,7 +80,7 @@ void laserScan::calibrate(Lidar& lidar, BlackLib::BlackADC& analog)
 	laserScan::set_all_pins_low();
 }	
 
-void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog)
+void laserScan::scan(Lidar& lidar/*, BlackLib::BlackADC& analog*/)
 {
 	//initializes count
 	int count = 0;
@@ -97,7 +97,7 @@ void laserScan::scan(Lidar& lidar, BlackLib::BlackADC& analog)
 			//waits 10 ms
 			usleep(10000);
 			//checks the ADC sensor
-			rotateVal = analog.getNumericValue();
+			//rotateVal = analog.getNumericValue();
 			if (laserScan::lastval < laserScan::threshold && rotateVal > laserScan::threshold)
 			{
 				laserScan::angle = 0;
