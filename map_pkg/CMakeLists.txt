@@ -25,7 +25,7 @@ include_directories(
 
 #link_directories()
 //finds the BlackLib Library
-find_library(BlackLib)
+find_package(BlackLib)
 
 # The MPU9150 node
 # Adds flags to the compiler command line for sources in the current directory and below.
