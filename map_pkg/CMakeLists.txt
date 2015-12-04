@@ -29,7 +29,7 @@ find_library(BlackLib)
 
 # The MPU9150 node
 # Adds flags to the compiler command line for sources in the current directory and below.
-add_definitions(-DEMPL_TARGET_LINUX -DMPU9150 -DAK8975_SECONDARY)
+#add_definitions(-DEMPL_TARGET_LINUX -DMPU9150 -DAK8975_SECONDARY)
 add_executable(laserScan_node scripts/laserScan_node.cpp)
 add_library(laserScan SHARED scripts/laserScan/laserScan.cpp)
 add_library(Lidar SHARED scripts/laserScan/Lidar.cpp)
