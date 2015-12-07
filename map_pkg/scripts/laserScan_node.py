@@ -64,7 +64,7 @@ class laserScan(object):
 		#sets up ADC
 		ADC.setup()
 		#cretes a value for the threshold
-		self.threshold = .2
+		self.threshold = .7
 		#creates a variable for the distance measurment
 		self.distance = 0
 		#creates a variable for the last ir sensor read
@@ -99,7 +99,7 @@ class laserScan(object):
 				time.sleep(.0025)
 				#checks for when the sensor triggers 0 angle calibration
 				#reads value from sensor
-				rotateVal = ADC.read("P9_39")
+				rotateVal = ADC.read("P9_37")
 				if rotateVal > self.threshold and self.lastval<self.threshold:
 					self.angle = 0
 				self.lastval = rotateVal			
@@ -131,7 +131,7 @@ class laserScan(object):
 				
 				#checks for when the sensor triggers 0 angle calibration
 				#reads value from sensor
-				rotateVal = ADC.read("P9_39")
+				rotateVal = ADC.read("P9_37")
 				#checks if the sensor is over the threshold but the last value is under the threshold
 				#if both are true the sensor has just been passe dan should now reset
 				if rotateVal > self.threshold and self.lastval<self.threshold:
@@ -148,7 +148,7 @@ class laserScan(object):
 				
 				#reads from ir sensor
 				#reads voltage value
-				voltage = ADC.read("P9_40")
+				voltage = ADC.read("P9_38")
 				#converts voltage values into distance(meters)
 				self.distance = (voltage**-.8271732796)
 				self.distance = self.distance*.1679936709
