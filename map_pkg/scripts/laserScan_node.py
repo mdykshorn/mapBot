@@ -69,13 +69,6 @@ class laserScan(object):
 		self.distance = 0
 		#creates a variable for the last ir sensor read
 		self.lastval = 1
-		#creates variables for time
-		self.startTime = 0.0
-		self.finishTime = 0.0
-		self.datatime1 = 0.0
-		self.datatime2 = 0.0
-		#creates a list of all angles throughout the scan (saves angle in radians)
-		self.angleR = []
 
 		#creates a variable for the ROS message and initilizes constant parameters
 		self.msg = LaserScan()
@@ -83,7 +76,7 @@ class laserScan(object):
 
 		self.msg.angle_increment = 0.015708
 		self.msg.range_min = 0
-		self.msg.range_max = 40
+		self.msg.range_max = 10
 
 
 	def calibrate(self):
@@ -113,14 +106,10 @@ class laserScan(object):
 		self.angle = .0001
 		#creates a variable that returns 1 when the scan completes
 		scanComplete = 0
-		#records the start time 
-		self.startTime = rospy.get_time()
 		#runs while there are less than 400 data points or the angle becomes is not 0
 		while count<400 and self.angle != 0:
 	
 			for pin_index in range(len(self.pins)):
-				#gets time before first reading
-				self.datatime1 = rospy.get_time()
 				self.drivemode(self.pins, pin_index)
 				
 				#writes to the LIDAR to take a reading
@@ -135,42 +124,26 @@ class laserScan(object):
 				#checks if the sensor is over the threshold but the last value is under the threshold
 				#if both are true the sensor has just been passe dan should now reset
 				if rotateVal > self.threshold and self.lastval<self.threshold:
-					#sets angle before it gets reset
-					self.msg.angle_max = self.angle
 					self.angle = 0
 				else:
 					self.angle = self.angle + .9
-					#sets max angle to the most recent angle
-					self.msg.angle_max = self.angle
 				self.lastval = rotateVal
-				#saves angle in a list so the first angle can be recalled
-				self.angleR.append(self.angle)
+
 				
 				#reads from ir sensor
 				#reads voltage value
-				voltage = ADC.read("P9_38")
+				voltage = ADC.read("P9_39")
 				#converts voltage values into distance(meters)
-				self.distance = (voltage**-.8271732796)
-				self.distance = self.distance*.1679936709
+				self.distance = (voltage*17.546)
 				#checks and discards data outside of accurate range
-				if self.distance>2:
-					self.distance = 2
-				elif self.distance<.15:
-					self.distance = .15
+				if self.distance>10:
+					self.distance = 10
+				elif self.distance<.1:
+					self.distance = .1
 					
-					
-				#i2c read isn't working
-				#reads distance from Lidar
-				#dist1 = self.i2c.readU8(self.distReadReg1)
-				#dist2 = self.i2c.readU8(self.distReadReg2)
-				#shifts bits to get correct distance
-				#self.distance = (dist1<<8) + dist2
-
-
 				#writes dynamic data to msg
 				#uses final data gathering time for the time increment between data readings
 				#taking the average over the entire period would probably be more accurate
-				self.msg.time_increment = (self.datatime1 - self.datatime2)
 				self.msg.ranges.append(self.distance)
 				#saves previous start time
 				self.datatime2 = self.datatime1
@@ -178,16 +151,6 @@ class laserScan(object):
 
 		#sets pin low when scan completes
 		set_all_pins_low(self.pins)
-
-		#writes static data to laserscan message
-		self.msg.angle_min = (self.angleR[0]*0.0174533)
-		#changes angle to radians
-		self.msg.angle_max = (self.msg.angle_max*0.0174533)
-
-		#records final time
-		self.finishTime = rospy.get_time()
-		#calcualtes scan time
-		self.msg.scan_time = (self.finishTime - self.startTime)
 
 		#changes variable when scan is complete
 		scanComplete = 1
@@ -207,17 +170,34 @@ if __name__ == '__main__':
 		lScan.calibrate()
 
 		scanComplete = 0
+		startTime = 0
+		endTIme = 0
+		scanTime = 0
 
 		#create sequence for message
 		sequence = 0
 
 		#keeps loop running
 		while not rospy.is_shutdown():
+
+			startTime = rospy.get_time()
 			scanComplete = lScan.scan()
+			endTime = rospy.get_time()
+
+			scanTime = endTime - startTime
+
 			#creates message header
 			lScan.msg.header.seq = sequence
 			lScan.msg.header.stamp.secs = lScan.startTime
 			lScan.msg.header.frame_id = "/base_link"
+			#hardcodes angle values, might differ by +- 1 degree but that is insignificant
+			lscan.msg.angle_min = .0157077
+			lscan.msg.angle_max = 6.28308
+			#calculates time increment
+			lscan.msg.time_increment = scanTime / 400
+			lscan.msg.scan_time - scanTime
+
+
 
 			pub.publish(lScan.msg)
 
