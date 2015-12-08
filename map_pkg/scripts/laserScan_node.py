@@ -167,11 +167,11 @@ if __name__ == '__main__':
 			lScan.msg.header.stamp.secs = startTime
 			lScan.msg.header.frame_id = "/base_link"
 			#hardcodes angle values, might differ by +- 1 degree but that is insignificant
-			lscan.msg.angle_min = .0157077
-			lscan.msg.angle_max = 6.28308
+			lScan.msg.angle_min = .0157077
+			lScan.msg.angle_max = 6.28308
 			#calculates time increment
-			lscan.msg.time_increment = scanTime / 400
-			lscan.msg.scan_time - scanTime
+			lScan.msg.time_increment = scanTime / 400
+			lScan.msg.scan_time - scanTime
 
 
 
