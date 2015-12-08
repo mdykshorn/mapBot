@@ -9,7 +9,6 @@ from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Header
 import Adafruit_BBIO.ADC as ADC
 import Adafruit_BBIO.GPIO as GPIO
-from Adafruit_I2C import Adafruit_I2C
 
 
 def initialize_pins(pins):
@@ -37,16 +36,6 @@ def fullstep(pins, pin_index):
 class laserScan(object):
 	def __init__(self,
 				 pins=["P9_27", "P8_15", "P8_11", "P8_12"]):
-
-		#sets lidar lite addresses
-		self.address = 0x62
-		self.distWriteReg = 0x00
-		self.distWriteVal = 0x04
-		self.distReadReg1 = 0x8f
-		self.distReadReg2 = 0x10
-
-		#initilizes the i2c bus on address lidar lite address on bus 1
-		#self.i2c = Adafruit_I2C(self.address, 1)
 		
 		#creates pins for the stepper motors
 		self.pins = pins
@@ -104,17 +93,12 @@ class laserScan(object):
 		count = 0
 		#changes angle slightly so loop will run
 		self.angle = .0001
-		#creates a variable that returns 1 when the scan completes
-		scanComplete = 0
 		#runs while there are less than 400 data points or the angle becomes is not 0
 		while count<400 and self.angle != 0:
 	
 			for pin_index in range(len(self.pins)):
 				self.drivemode(self.pins, pin_index)
 				
-				#writes to the LIDAR to take a reading
-				#writes to the register that takes measurment
-				#self.i2c.write8(self.distWriteReg, self.distWriteVal)
 				#waits for 'x' seconds to control motor speed and prevent sensor overpolling(minimum sleep time is .0025)
 				time.sleep(.0025)
 				
@@ -122,7 +106,7 @@ class laserScan(object):
 				#reads value from sensor
 				rotateVal = ADC.read("P9_37")
 				#checks if the sensor is over the threshold but the last value is under the threshold
-				#if both are true the sensor has just been passe dan should now reset
+				#if both are true the sensor has just been passed and should now reset
 				if rotateVal > self.threshold and self.lastval<self.threshold:
 					self.angle = 0
 				else:
@@ -141,9 +125,6 @@ class laserScan(object):
 				elif self.distance<.1:
 					self.distance = .1
 					
-				#writes dynamic data to msg
-				#uses final data gathering time for the time increment between data readings
-				#taking the average over the entire period would probably be more accurate
 				self.msg.ranges.append(self.distance)
 				
 				count = count+1
@@ -151,19 +132,15 @@ class laserScan(object):
 		#sets pin low when scan completes
 		set_all_pins_low(self.pins)
 
-		#changes variable when scan is complete
-		scanComplete = 1
-		return scanComplete	
-
 
 if __name__ == '__main__':
 	try:
 		#initializes the node named scanner
-		rospy.init_node('irdistance', anonymous=True)
+		rospy.init_node('laserScan', anonymous=True)
 
-		pub = rospy.Publisher('/scan', LaserScan, queue_size=10)
+		pub = rospy.Publisher('/base_scan', LaserScan, queue_size=10)
 
-		#creates an instance of the class
+		#creates an instance of the laserscan class
 		lScan = laserScan()
 
 		lScan.calibrate()
@@ -180,7 +157,7 @@ if __name__ == '__main__':
 		while not rospy.is_shutdown():
 
 			startTime = rospy.get_time()
-			scanComplete = lScan.scan()
+			lScan.scan()
 			endTime = rospy.get_time()
 
 			scanTime = endTime - startTime
