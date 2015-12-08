@@ -145,8 +145,7 @@ class laserScan(object):
 				#uses final data gathering time for the time increment between data readings
 				#taking the average over the entire period would probably be more accurate
 				self.msg.ranges.append(self.distance)
-				#saves previous start time
-				self.datatime2 = self.datatime1
+				
 				count = count+1
 
 		#sets pin low when scan completes
