@@ -127,7 +127,7 @@ class laserScan(object):
 				#writes to the register that takes measurment
 				#self.i2c.write8(self.distWriteReg, self.distWriteVal)
 				#waits for 'x' seconds to control motor speed and prevent sensor overpolling(minimum sleep time is .0025)
-				time.sleep(.01)
+				time.sleep(.0025)
 				
 				#checks for when the sensor triggers 0 angle calibration
 				#reads value from sensor
