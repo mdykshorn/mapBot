@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
 			#creates message header
 			lScan.msg.header.seq = sequence
-			lScan.msg.header.stamp.secs = lScan.startTime
+			lScan.msg.header.stamp.secs = startTime
 			lScan.msg.header.frame_id = "/base_link"
 			#hardcodes angle values, might differ by +- 1 degree but that is insignificant
 			lscan.msg.angle_min = .0157077
