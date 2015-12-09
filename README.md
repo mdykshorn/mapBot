@@ -3,9 +3,13 @@ Inexpensive SLAM mapping robot
 
 Repository Contains 2 packages
 
-bb_mpu9150 is a package origianlly created by Víctor Mayoral Vilches
-The bb_mpu9150 package takes data from an mpu_9150 IMU and publishes to the rostopic /IMU_euler
-The package has been modified to publish with the ROS IMU message type
-
 map_pkg is a package created specifically for our robot. The package contains a node
-that spins our Lidar lite 360 degrees and publishes the scan in the ROS laserscan message type
+that spins our Lidar lite 360 degrees and publishes the scan in the ROS laserscan message type.
+
+**map_pkg currently contains 2 versions of the laserScan_node, the first and currently used version is in python
+and doesn't support i2c for the LidarLite, the second is written in c++ but is not completely working, the c++ version does
+support i2c**
+
+The second package is for configuration files and launch files for the navigation stack
+
+CAD files for our rotating assembly and lasercut pices are also availible in the CAD folder
