@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  <node name="motorcontrol" pkg="general_khan" type="motorDrive.py">
+    <param name="robot_ns" value="" />
+    <param name="period" value="0.02" />
+  </node>
+</launch>
