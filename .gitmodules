@@ -1,3 +1,3 @@
 [submodule "src/khan_robot"]
 	path = src/khan_robot
-	url = git@github.com:mdykshorn/khan_robot.git
+	url = https://github.com/mdykshorn/khan_robot.git
