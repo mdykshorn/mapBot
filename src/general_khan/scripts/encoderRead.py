@@ -31,26 +31,26 @@ def callLeft(data):
 
 	#puts inputs into the quadrature decoder program
     quadCalcL.update(channelA, channelB, time)
-	
+
 	#creates messages
     leftFMSG = JointState()
     leftRMSG = JointState()
     header = Header()
-	
+
     #appends velocity and position data to the joinstate message
 	#front wheel
     leftFMSG.header.stamp.secs = rospy.get_time()
     leftFMSG.name.append('front_left_wheel')
-    leftFMSG.position.append(quadCalcL.position)
+    leftFMSG.position.append(10)
 	#rear wheel
     leftRMSG.header.stamp.secs = rospy.get_time()
     leftRMSG.name.append('rear_left_wheel')
-    leftRMSG.position.append(quadCalcL.position)
-	
+    leftRMSG.position.append(10)
+
 	#publishes message
     pubFL.publish(leftFMSG)
     pubRL.publish(leftRMSG)
-	
+
 def callRight(data):
 	#gets time
     time = rospy.get_time()
@@ -60,7 +60,7 @@ def callRight(data):
 
 	#puts inputs into the quadrature decoder program
     quadCalcR.update(channelA, channelB, time)
-	 
+
 	#creates messages
     rightFMSG = JointState()
     rightRMSG = JointState()
@@ -70,11 +70,11 @@ def callRight(data):
 	#front wheel
     rightFMSG.header.stamp.secs = rospy.get_time()
     rightFMSG.name.append('front_right_wheel')
-    rightFMSG.position.append(quadCalcL.position)
+    rightFMSG.position.append(9)
 	#rear wheel
     rightRMSG.header.stamp.secs = rospy.get_time()
     rightRMSG.name.append('rear_right_wheel')
-    rightRMSG.position.append(quadCalcL.position)
+    rightRMSG.position.append(9)
 
 	#publishes message
     pubFR.publish(rightFMSG)
@@ -92,13 +92,13 @@ if __name__ == '__main__':
     pubRR = rospy.Publisher('/py_controller/rear_right_wheel/encoder', JointState, queue_size=10)
     pubFL = rospy.Publisher('/py_controller/front_left_wheel/encoder', JointState, queue_size=10)
     pubRL = rospy.Publisher('/py_controller/rear_left_wheel/encoder', JointState, queue_size=10)
-    
+
 	#sets up GPIO channels
     GPIO.setup("P9_23", GPIO.IN)
     GPIO.setup("P9_30", GPIO.IN)
     GPIO.setup("P8_17", GPIO.IN)
-    GPIO.setup("P8_26", GPIO.IN)	
-	
+    GPIO.setup("P8_26", GPIO.IN)
+
     GPIO.add_event_detect("P9_23", GPIO.BOTH)
     GPIO.add_event_detect("P9_30", GPIO.BOTH)
     GPIO.add_event_detect("P8_17", GPIO.BOTH)
@@ -108,7 +108,7 @@ if __name__ == '__main__':
     GPIO.add_event_callback("P9_30", callLeft)
     GPIO.add_event_callback("P8_17", callRight)
     GPIO.add_event_callback("P8_26", callRight)
- 
+
 
     rospy.spin()
   #If we are interrupted, catch the exception, but do nothing
