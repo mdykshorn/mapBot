@@ -1,0 +1,8 @@
+prefix=/home/mdykshorn/mapBot/devel
+
+Name: general_khan
+Description: Description of general_khan
+Version: 0.0.1
+Cflags: 
+Libs: -L/home/mdykshorn/mapBot/devel/lib -lgeneral_khan
+Requires: roscpp rospy sensor_msgs std_msgs

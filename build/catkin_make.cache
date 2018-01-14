@@ -1,0 +1,2 @@
+general_khan
+-DCATKIN_DEVEL_PREFIX=/home/mdykshorn/mapBot/devel -DCMAKE_INSTALL_PREFIX=/home/mdykshorn/mapBot/install -G Unix Makefiles
