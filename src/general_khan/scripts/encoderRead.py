@@ -22,6 +22,8 @@ pubRR = None
 pubFL = None
 pubRL = None
 
+tempdist = 0
+
 def callLeft(data):
 	#gets time
     time = rospy.get_time()
@@ -41,11 +43,11 @@ def callLeft(data):
 	#front wheel
     leftFMSG.header.stamp.secs = rospy.get_time()
     leftFMSG.name.append('front_left_wheel')
-    leftFMSG.position.append(10)
+    leftFMSG.position.append(data)
 	#rear wheel
     leftRMSG.header.stamp.secs = rospy.get_time()
     leftRMSG.name.append('rear_left_wheel')
-    leftRMSG.position.append(10)
+    leftRMSG.position.append(data)
 
 	#publishes message
     pubFL.publish(leftFMSG)
@@ -70,11 +72,11 @@ def callRight(data):
 	#front wheel
     rightFMSG.header.stamp.secs = rospy.get_time()
     rightFMSG.name.append('front_right_wheel')
-    rightFMSG.position.append(9)
+    rightFMSG.position.append(data)
 	#rear wheel
     rightRMSG.header.stamp.secs = rospy.get_time()
     rightRMSG.name.append('rear_right_wheel')
-    rightRMSG.position.append(9)
+    rightRMSG.position.append(data)
 
 	#publishes message
     pubFR.publish(rightFMSG)
@@ -93,24 +95,13 @@ if __name__ == '__main__':
     pubFL = rospy.Publisher('/py_controller/front_left_wheel/encoder', JointState, queue_size=10)
     pubRL = rospy.Publisher('/py_controller/rear_left_wheel/encoder', JointState, queue_size=10)
 
-	#sets up GPIO channels
-    GPIO.setup("P9_23", GPIO.IN)
-    GPIO.setup("P9_30", GPIO.IN)
-    GPIO.setup("P8_17", GPIO.IN)
-    GPIO.setup("P8_26", GPIO.IN)
+	rate = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+        tempdist = tempdist + 1
+        callRight(tempdist)
+        callLeft(tempDist)
+        rate.sleep()
 
-    GPIO.add_event_detect("P9_23", GPIO.BOTH)
-    GPIO.add_event_detect("P9_30", GPIO.BOTH)
-    GPIO.add_event_detect("P8_17", GPIO.BOTH)
-    GPIO.add_event_detect("P8_26", GPIO.BOTH)
-
-    GPIO.add_event_callback("P9_23", callLeft)
-    GPIO.add_event_callback("P9_30", callLeft)
-    GPIO.add_event_callback("P8_17", callRight)
-    GPIO.add_event_callback("P8_26", callRight)
-
-
-    rospy.spin()
   #If we are interrupted, catch the exception, but do nothing
   except rospy.ROSInterruptException:
     pass
