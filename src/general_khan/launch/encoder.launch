@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <node name="encoders" pkg="general_khan" type="encoderRead.py">
+  <node name="encoders" pkg="general_khan" type="encoderCalc.py">
     <param name="robot_ns" value="" />
     <param name="period" value="0.02" />
   </node>
