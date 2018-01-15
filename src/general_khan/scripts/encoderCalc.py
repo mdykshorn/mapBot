@@ -58,7 +58,7 @@ def callLeft(data):
     counter = 0
     avg_time = 0
     # For every velocity sample in the circular buffer
-    for ii, jj in timesL:
+    for ii, jj in list(timesL):
       counter = counter + ii
       avg_time = avg_time + jj
 
@@ -116,7 +116,7 @@ def callRight(data):
     counter = 0
     avg_time = 0
     # For every velocity sample in the circular buffer
-    for ii, jj in timesL:
+    for ii, jj in list(timesR):
       counter = counter + ii
       avg_time = avg_time + jj
 
