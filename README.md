@@ -1,15 +1,43 @@
 # mapBot
 Inexpensive SLAM mapping robot
 
-**Repository Contains 2 packages:**
+# Installation
 
-**map_pkg is a package created specifically for our robot. The package contains a node
-that spins our Lidar lite 360 degrees and publishes the scan in the ROS laserscan message type.**
+Install ROS and all packages in khan_robot
 
-map_pkg currently contains 2 versions of the laserScan_node, the first and currently used version is in python
-and doesn't support i2c for the LidarLite, the second is written in c++ but is not completely working, the c++ version does
-support i2c
+# Connecting to the Beaglebone
 
-**The second package is for configuration files and launch files for the navigation stack**
+in a terminal `ssh ubuntu@<beaglebone_ip>`
 
-**CAD files for our rotating assembly and lasercut pices are also availible in the CAD folder**
+password: temppwd
+
+# Setup ROS for multi master use
+
+### On your computer
+find the ip of your computer using `ifconfig` and add the following line to you `~/.bashrc`, with the ip you found
+`export ROS_IP=<your_computer_ip>`
+
+### on the beaglebone
+in ssh session with beaglebone: `export ROS_MASTER_URI=http://<your_computer_ip>:11311`
+
+# Launching
+start `roscore` on your computer
+
+### on beaglebone
+This will launch the nodes that control the motors and read odometry info from the encoders
+
+** must be in a sudo shell to run files **
+1. type `sudo -s` to get a sudo shell
+2. `cd mapBot`
+3. `source devel/setup.bash`
+4. `roslaunch general_khan general_khan.launch`
+
+### on your computer
+This will launch controllers for the robot
+
+1. `cd mapBot`
+2. `catkin_make`
+3. `roslaunch khan_robot example_khan_hw.launch`
+
+### Controlling the robot
+the rover can be controlled by a `twist` msg on the topic `/cmd_vel`, the khan_robot package has various ways of publishing the message, including `rosjoy`, `rqt_robot_steering`, or command line publishing

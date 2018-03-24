@@ -110,7 +110,7 @@ def callRight(data):
     #new_position = theta - (2.0 * pi) * floor((theta + pi) / (2.0 * pi))
     new_position = theta
 
-    timesL.append((theta_vel, time - prev_timeR))
+    timesR.append((theta_vel, time - prev_timeR))
 
     # Sum up position offset and how long those updates have taken
     counter = 0
